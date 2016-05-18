@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.yamin.reader" >
-
+    package="com.yamin.reader">
 
     <supports-screens
         android:anyDensity="true"
@@ -9,9 +8,11 @@
         android:normalScreens="true"
         android:smallScreens="true"
         android:xlargeScreens="true" />
+
     <uses-permission-sdk-23 android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
     <uses-permission-sdk-23 android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission-sdk-23 android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <uses-permission android:name="android.permission.CHANGE_CONFIGURATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -21,65 +22,80 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
 
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
     <application
-        android:name="org.geometerplus.android.fbreader.FBReaderApplication"
+        android:name="com.read.pan.app.ReadApplication"
         android:hardwareAccelerated="true"
         android:icon="@drawable/icon"
-        android:theme="@style/AppTheme" >
-
+        android:theme="@style/AppTheme">
         <activity android:name="com.read.pan.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".activity.MainActivity"
-                  android:process=":library"
-                  android:screenOrientation="portrait"
-                  >
-        </activity>
+        <activity
+            android:name=".activity.MainActivity"
+            android:process=":library"
+            android:screenOrientation="portrait"></activity>
         <!--  -->
-        <activity android:name=".activity.FileBrowserActivity"
-            android:screenOrientation="portrait"
-                  android:launchMode="singleTop">
-                <!-- Receives the search request. -->
+        <activity
+            android:name=".activity.FileBrowserActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait">
+
+            <!-- Receives the search request. -->
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
-                <!-- No category needed, because the Intent will specify this class component-->
+                <!-- No category needed, because the Intent will specify this class component -->
             </intent-filter>
             <!-- Points to searchable meta data. -->
-            <meta-data android:name="android.app.searchable"
-                       android:resource="@xml/searchable" />
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
         </activity>
-               <activity android:name=".activity.BookFavoriteActivity"
-                   android:screenOrientation="portrait">
-               </activity>
-         <activity android:name=".activity.FileSearchResultActivity"
-                   android:screenOrientation="portrait">
-        </activity>
-         <!-- Points to searchable activity so the whole app can invoke search. -->
-        <meta-data android:name="android.app.default_searchable"
-                   android:value=".activity.FileBrowserActivity" />
+        <activity
+            android:name=".activity.BookFavoriteActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".activity.FileSearchResultActivity"
+            android:screenOrientation="portrait"></activity>
+        <!-- Points to searchable activity so the whole app can invoke search. -->
+        <meta-data
+            android:name="android.app.default_searchable"
+            android:value=".activity.FileBrowserActivity" />
+
         <activity
             android:name=".activity.CoreReadActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:launchMode="singleTop" >
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.easyreader.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:scheme="file" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:scheme="fbreader-action" />
             </intent-filter>
             <intent-filter>
-                <action   android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
-                <data     android:host=""
-                          android:scheme="file" />
+
+                <data
+                    android:host=""
+                    android:scheme="file" />
                 <data android:pathPattern=".*\\.epub" />
                 <data android:pathPattern=".*\\.oeb" />
                 <data android:pathPattern=".*\\.fb2" />
@@ -90,9 +106,11 @@
                 <data android:pathPattern=".*\\.rtf" />
             </intent-filter>
             <intent-filter>
-                <action   android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
-               <data
+
+                <data
                     android:host=""
                     android:mimeType="text/plain"
                     android:scheme="file" />
@@ -106,6 +124,7 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
@@ -115,6 +134,7 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
@@ -140,7 +160,7 @@
         <activity
             android:name="org.geometerplus.android.fbreader.error.BookReadingErrorActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:process=":error" >
+            android:process=":error">
             <intent-filter>
                 <action android:name="android.fbreader.action.ERROR" />
 
@@ -153,7 +173,7 @@
         <activity
             android:name="org.geometerplus.android.fbreader.crash.MissingNativeLibraryActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:process=":crash" >
+            android:process=":crash">
             <intent-filter>
                 <action android:name="android.easyreader.action.CRASH" />
 
@@ -165,30 +185,34 @@
         <!--  -->
         <service
             android:name="org.geometerplus.android.fbreader.api.ApiService"
-            android:launchMode="singleTask" >
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.fbreader.action.API" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </service>
-       <service android:name="org.geometerplus.android.fbreader.libraryService.LibraryService" 
-                android:launchMode="singleTask" android:process=":libraryService">
-			<intent-filter>
-				<action android:name="android.fbreader.action.LIBRARY_SERVICE"/>
-			</intent-filter>
-		</service>
+        <service
+            android:name="org.geometerplus.android.fbreader.libraryService.LibraryService"
+            android:launchMode="singleTask"
+            android:process=":libraryService">
+            <intent-filter>
+                <action android:name="android.fbreader.action.LIBRARY_SERVICE" />
+            </intent-filter>
+        </service>
+
         <activity
             android:name="org.geometerplus.android.fbreader.CancelActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:theme="@style/Theme_dialog" />
         <activity
             android:name="org.geometerplus.android.fbreader.style.StyleListActivity"
-             android:theme="@style/Theme_dialog"
-            android:configChanges="orientation|keyboardHidden|screenSize" />
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:theme="@style/Theme_dialog" />
         <activity
             android:name="org.geometerplus.android.fbreader.style.EditStyleActivity"
-            android:theme="@style/Theme_dialog"
-            android:configChanges="orientation|keyboardHidden|screenSize" />
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:theme="@style/Theme_dialog" />
         <activity
             android:name="org.geometerplus.android.fbreader.image.ImageViewActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -200,7 +224,7 @@
             android:name="org.geometerplus.android.fbreader.BookmarksActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:launchMode="singleTask"
-            android:process=":bookmarks" >
+            android:process=":bookmarks">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
@@ -215,9 +239,14 @@
         <activity
             android:name="org.geometerplus.android.fbreader.preferences.PreferenceActivity"
             android:configChanges="orientation|keyboardHidden|screenSize" />
-         <provider
+
+        <provider
             android:name=".database.BookContentProvider"
             android:authorities="com.yamin.reader.BookContentProvider" />
+
+        <activity
+            android:name=".LoginActivity"
+            android:label="@string/title_activity_login"></activity>
     </application>
 
 </manifest>

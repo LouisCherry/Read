@@ -20,10 +20,9 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.read.pan.adapter.FragmentAdapter;
+import com.read.pan.app.ReadApplication;
 import com.read.pan.fragment.BookshelfFragment;
 import com.read.pan.fragment.StoreFragment;
-import com.read.pan.network.RestClient;
-import com.read.pan.network.ResultCode;
 import com.yamin.reader.R;
 import com.yamin.reader.activity.FileBrowserActivity;
 
@@ -33,10 +32,6 @@ import java.util.List;
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -62,7 +57,7 @@ public class MainActivity extends AppCompatActivity
     ImageView avatar;
     List<String> tablayoutTitle;
     List<Fragment> viewPagerFragments;
-
+    ReadApplication application;
     @Override
     public void onFragmentInteraction(Uri uri){}
     @Override
@@ -87,6 +82,7 @@ public class MainActivity extends AppCompatActivity
         viewPagerFragments=new ArrayList<>();
         viewPagerFragments.add(new BookshelfFragment());
         viewPagerFragments.add(new StoreFragment());
+        application= (ReadApplication) getApplication();
     }
 
     /**
@@ -140,24 +136,27 @@ public class MainActivity extends AppCompatActivity
         avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                RestClient.userApi().login("123","123").enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        if(response.code()== ResultCode.SUCCESS){
-                            Snackbar.make(v,"登录成功",Snackbar.LENGTH_SHORT).setAction("action",null).show();
-                        }
-                        if(response.code()==ResultCode.USERNOTEXIST){
-                            Snackbar.make(v,"用户名不存在",Snackbar.LENGTH_SHORT).setAction("action",null).show();
-                        }
-                        if(response.code()==ResultCode.PASSWRONG){
-                            Snackbar.make(v,"密码错误",Snackbar.LENGTH_SHORT).setAction("action",null).show();
-                        }
-                    }
+                if(application.isLogin()){
 
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                    }
-                });
+                }
+//                RestClient.userApi().login("123","123").enqueue(new Callback<ResponseBody>() {
+//                    @Override
+//                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+//                        if(response.code()== ResultCode.SUCCESS){
+//                            Snackbar.make(v,"登录成功",Snackbar.LENGTH_SHORT).setAction("action",null).show();
+//                        }
+//                        if(response.code()==ResultCode.USERNOTEXIST){
+//                            Snackbar.make(v,"用户名不存在",Snackbar.LENGTH_SHORT).setAction("action",null).show();
+//                        }
+//                        if(response.code()==ResultCode.PASSWRONG){
+//                            Snackbar.make(v,"密码错误",Snackbar.LENGTH_SHORT).setAction("action",null).show();
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+//                    }
+//                });
             }
         });
     }
