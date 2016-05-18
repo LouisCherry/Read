@@ -19,9 +19,6 @@
 
 package org.geometerplus.android.fbreader.preferences;
 
-import org.geometerplus.zlibrary.core.options.ZLIntegerRangeOption;
-import org.geometerplus.zlibrary.core.resources.ZLResource;
-
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Canvas;
@@ -36,7 +33,10 @@ import android.preference.DialogPreference;
 import android.view.View;
 import android.widget.SeekBar;
 
-import com.yamin.reader.R;
+import com.read.pan.R;
+
+import org.geometerplus.zlibrary.core.options.ZLIntegerRangeOption;
+import org.geometerplus.zlibrary.core.resources.ZLResource;
 
 class AnimationSpeedPreference extends DialogPreference {
 	private final ZLIntegerRangeOption myOption;

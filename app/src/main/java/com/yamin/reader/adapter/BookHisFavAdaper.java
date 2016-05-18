@@ -1,8 +1,5 @@
 package com.yamin.reader.adapter;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.ContentResolver;
 import android.content.Context;
 import android.graphics.Color;
@@ -12,15 +9,18 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import com.yamin.reader.R;
+
+import com.read.pan.R;
 import com.yamin.reader.database.DbDataOperation;
 import com.yamin.reader.model.Book;
 import com.yamin.reader.utils.ToolUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class BookHisFavAdaper extends BaseAdapter {
 	private LayoutInflater mInflater;

@@ -19,14 +19,14 @@
 
 package org.geometerplus.android.fbreader;
 
-import org.geometerplus.fbreader.fbreader.ActionCode;
-import org.geometerplus.fbreader.fbreader.FBReaderApp;
-
 import android.view.View;
 import android.widget.RelativeLayout;
 
-import com.yamin.reader.R;
+import com.read.pan.R;
 import com.yamin.reader.activity.CoreReadActivity;
+
+import org.geometerplus.fbreader.fbreader.ActionCode;
+import org.geometerplus.fbreader.fbreader.FBReaderApp;
 
 public class SelectionPopup extends ButtonsPopupPanel {
 	public final static String ID = "SelectionPopup";

@@ -19,15 +19,15 @@
 
 package org.geometerplus.android.fbreader.crash;
 
-import org.geometerplus.zlibrary.core.resources.ZLResource;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.yamin.reader.R;
+import com.read.pan.R;
+
+import org.geometerplus.zlibrary.core.resources.ZLResource;
 
 public class MissingNativeLibraryActivity extends Activity {
 	@Override

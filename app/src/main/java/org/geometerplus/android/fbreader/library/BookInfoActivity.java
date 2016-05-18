@@ -19,11 +19,23 @@
 
 package org.geometerplus.android.fbreader.library;
 
-import java.io.File;
-import java.text.DateFormat;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
+import android.app.Activity;
+import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Bitmap;
+import android.os.Bundle;
+import android.text.method.LinkMovementMethod;
+import android.util.DisplayMetrics;
+import android.util.Log;
+import android.view.View;
+import android.view.Window;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import com.read.pan.R;
+import com.yamin.reader.activity.CoreReadActivity;
 
 import org.geometerplus.android.fbreader.OrientationUtil;
 import org.geometerplus.android.fbreader.libraryService.BookCollectionShadow;
@@ -45,23 +57,11 @@ import org.geometerplus.zlibrary.core.resources.ZLResource;
 import org.geometerplus.zlibrary.ui.android.image.ZLAndroidImageData;
 import org.geometerplus.zlibrary.ui.android.image.ZLAndroidImageManager;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.content.res.ColorStateList;
-import android.graphics.Bitmap;
-import android.os.Bundle;
-import android.text.method.LinkMovementMethod;
-import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.View;
-import android.view.Window;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-
-import com.yamin.reader.R;
-import com.yamin.reader.activity.CoreReadActivity;
+import java.io.File;
+import java.text.DateFormat;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
 
 public class BookInfoActivity extends Activity implements IBookCollection.Listener {
 	private static final boolean ENABLE_EXTENDED_FILE_INFO = false;

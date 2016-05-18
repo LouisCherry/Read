@@ -8,8 +8,6 @@ import java.util.Date;
 import org.geometerplus.android.fbreader.libraryService.BookCollectionShadow;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
 import org.geometerplus.zlibrary.core.filesystem.ZLFile;
-
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.SearchManager;
 import android.content.ContentResolver;
@@ -41,7 +39,7 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.yamin.reader.R;
+import com.read.pan.R;
 import com.yamin.reader.adapter.FileListAdapter;
 import com.yamin.reader.database.DbDataOperation;
 import com.yamin.reader.database.DbTags;

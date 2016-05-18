@@ -1,9 +1,5 @@
 package com.yamin.reader.adapter;
 
-import java.io.IOException;
-import java.util.LinkedList;
-import java.util.List;
-
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
@@ -13,7 +9,11 @@ import android.widget.BaseAdapter;
 import android.widget.Gallery;
 import android.widget.ImageView;
 
-import com.yamin.reader.R;
+import com.read.pan.R;
+
+import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 
 public class PopGalleryAdapter extends BaseAdapter {
 	private LayoutInflater inflater;

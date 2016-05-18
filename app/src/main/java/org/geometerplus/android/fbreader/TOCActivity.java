@@ -31,7 +31,7 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.yamin.reader.R;
+import com.read.pan.R;
 import com.yamin.reader.activity.CoreReadActivity;
 
 import org.geometerplus.fbreader.bookmodel.TOCTree;

@@ -23,7 +23,6 @@ import com.read.pan.adapter.FragmentAdapter;
 import com.read.pan.app.ReadApplication;
 import com.read.pan.fragment.BookshelfFragment;
 import com.read.pan.fragment.StoreFragment;
-import com.yamin.reader.R;
 import com.yamin.reader.activity.FileBrowserActivity;
 
 import java.util.ArrayList;

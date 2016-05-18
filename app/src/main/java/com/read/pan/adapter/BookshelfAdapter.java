@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.yamin.reader.R;
+import com.read.pan.R;
 import com.yamin.reader.model.Book;
 
 import java.util.ArrayList;

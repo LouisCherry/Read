@@ -1,6 +1,5 @@
 package yuku.ambilwarna.widget;
 
-import yuku.ambilwarna.AmbilWarnaDialog;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Parcel;
@@ -9,7 +8,9 @@ import android.preference.Preference;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.yamin.reader.R;
+import com.read.pan.R;
+
+import yuku.ambilwarna.AmbilWarnaDialog;
 
 public class AmbilWarnaPreference extends Preference {
 	int value;

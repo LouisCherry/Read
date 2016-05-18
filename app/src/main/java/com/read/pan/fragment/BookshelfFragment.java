@@ -17,7 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.read.pan.adapter.BookshelfAdapter;
-import com.yamin.reader.R;
+import com.read.pan.R;
 import com.yamin.reader.activity.CoreReadActivity;
 import com.yamin.reader.adapter.ScanFileAdapter;
 import com.yamin.reader.database.DbDataOperation;

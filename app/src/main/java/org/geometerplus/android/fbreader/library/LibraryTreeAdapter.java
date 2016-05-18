@@ -19,6 +19,15 @@
 
 package org.geometerplus.android.fbreader.library;
 
+import android.text.Html;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.read.pan.R;
+
 import org.geometerplus.android.fbreader.covers.CoverManager;
 import org.geometerplus.android.fbreader.tree.TreeAdapter;
 import org.geometerplus.fbreader.book.Book;
@@ -34,15 +43,6 @@ import org.geometerplus.fbreader.library.TagListTree;
 import org.geometerplus.fbreader.library.TagTree;
 import org.geometerplus.fbreader.library.TitleListTree;
 import org.geometerplus.zlibrary.core.filesystem.ZLFile;
-
-import android.text.Html;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
-
-import com.yamin.reader.R;
 
 class LibraryTreeAdapter extends TreeAdapter {
 	private CoverManager myCoverManager;

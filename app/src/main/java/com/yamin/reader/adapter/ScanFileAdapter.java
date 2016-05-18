@@ -1,7 +1,5 @@
 package com.yamin.reader.adapter;
 
-import java.util.ArrayList;
-
 import android.content.Context;
 import android.graphics.Color;
 import android.view.LayoutInflater;
@@ -11,7 +9,9 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.yamin.reader.R;
+import com.read.pan.R;
+
+import java.util.ArrayList;
 
 public class ScanFileAdapter extends BaseAdapter {
 

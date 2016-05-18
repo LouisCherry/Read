@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.yamin.reader">
+    package="com.read.pan">
 
     <supports-screens
         android:anyDensity="true"
@@ -40,12 +40,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.MainActivity"
+            android:name="com.yamin.reader.activity.MainActivity"
             android:process=":library"
             android:screenOrientation="portrait"></activity>
         <!--  -->
         <activity
-            android:name=".activity.FileBrowserActivity"
+            android:name="com.yamin.reader.activity.FileBrowserActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait">
 
@@ -68,10 +68,10 @@
         <!-- Points to searchable activity so the whole app can invoke search. -->
         <meta-data
             android:name="android.app.default_searchable"
-            android:value=".activity.FileBrowserActivity" />
+            android:value="com.yamin.reader.activity.FileBrowserActivity" />
 
         <activity
-            android:name=".activity.CoreReadActivity"
+            android:name="com.yamin.reader.activity.CoreReadActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:launchMode="singleTop">
             <intent-filter>
@@ -241,7 +241,7 @@
             android:configChanges="orientation|keyboardHidden|screenSize" />
 
         <provider
-            android:name=".database.BookContentProvider"
+            android:name="com.yamin.reader.database.BookContentProvider"
             android:authorities="com.yamin.reader.BookContentProvider" />
 
         <activity

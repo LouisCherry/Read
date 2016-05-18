@@ -19,20 +19,20 @@
 
 package org.geometerplus.android.fbreader;
 
-import org.geometerplus.fbreader.bookmodel.TOCTree;
-import org.geometerplus.fbreader.fbreader.FBReaderApp;
-import org.geometerplus.zlibrary.core.resources.ZLResource;
-import org.geometerplus.zlibrary.text.view.ZLTextView;
-import org.geometerplus.zlibrary.text.view.ZLTextWordCursor;
-
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.yamin.reader.R;
+import com.read.pan.R;
 import com.yamin.reader.activity.CoreReadActivity;
+
+import org.geometerplus.fbreader.bookmodel.TOCTree;
+import org.geometerplus.fbreader.fbreader.FBReaderApp;
+import org.geometerplus.zlibrary.core.resources.ZLResource;
+import org.geometerplus.zlibrary.text.view.ZLTextView;
+import org.geometerplus.zlibrary.text.view.ZLTextWordCursor;
 
 public final class NavigationPopup extends PopupPanel {
 	public final static String ID = "NavigationPopup";

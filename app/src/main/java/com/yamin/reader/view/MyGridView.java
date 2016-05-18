@@ -6,7 +6,7 @@ import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.widget.GridView;
 
-import com.yamin.reader.R;
+import com.read.pan.R;
 
 public class MyGridView extends GridView {
 

@@ -51,7 +51,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.yamin.reader.R;
+import com.read.pan.R;
 import com.yamin.reader.adapter.BookHisFavAdaper;
 import com.yamin.reader.adapter.BookShelfListAdaper;
 import com.yamin.reader.adapter.ScanFileAdapter;

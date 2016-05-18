@@ -1,15 +1,5 @@
 package com.yamin.reader.utils;
 
-import java.io.File;
-import java.text.DecimalFormat;
-
-import org.geometerplus.fbreader.book.BookUtil;
-import org.geometerplus.zlibrary.core.filesystem.ZLFile;
-import org.geometerplus.zlibrary.core.image.ZLImage;
-import org.geometerplus.zlibrary.core.image.ZLLoadableImage;
-import org.geometerplus.zlibrary.ui.android.image.ZLAndroidImageData;
-import org.geometerplus.zlibrary.ui.android.image.ZLAndroidImageManager;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -20,7 +10,17 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.DisplayMetrics;
 
-import com.yamin.reader.R;
+import com.read.pan.R;
+
+import org.geometerplus.fbreader.book.BookUtil;
+import org.geometerplus.zlibrary.core.filesystem.ZLFile;
+import org.geometerplus.zlibrary.core.image.ZLImage;
+import org.geometerplus.zlibrary.core.image.ZLLoadableImage;
+import org.geometerplus.zlibrary.ui.android.image.ZLAndroidImageData;
+import org.geometerplus.zlibrary.ui.android.image.ZLAndroidImageManager;
+
+import java.io.File;
+import java.text.DecimalFormat;
 
 public class ToolUtils {
 	public static boolean isWifiConnected(Context context) {

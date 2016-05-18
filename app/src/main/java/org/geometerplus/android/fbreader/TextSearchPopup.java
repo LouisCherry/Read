@@ -18,13 +18,13 @@
  */
 
 package org.geometerplus.android.fbreader;
-import org.geometerplus.fbreader.fbreader.ActionCode;
-import org.geometerplus.fbreader.fbreader.FBReaderApp;
-
 import android.widget.RelativeLayout;
 
-import com.yamin.reader.R;
+import com.read.pan.R;
 import com.yamin.reader.activity.CoreReadActivity;
+
+import org.geometerplus.fbreader.fbreader.ActionCode;
+import org.geometerplus.fbreader.fbreader.FBReaderApp;
 
 
 public final class TextSearchPopup extends ButtonsPopupPanel {
