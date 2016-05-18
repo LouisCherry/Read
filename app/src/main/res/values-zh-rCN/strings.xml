@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<string name="app_name">读</string>
+	<string name="navigation_drawer_open">打开导航抽屉</string>
+	<string name="navigation_drawer_close">关闭导航抽屉</string>
+	<string name="action_settings">设置</string>
+	<string name="tablayoutTitle1">书架</string>
+	<string name="tablelayoutTitle2">商城</string>
+	<string name="navigation_menu1">导入</string>
+	<string name="navigation_menu2">喜欢</string>
+	<string name="navigation_menu4">设置</string>
+	<string name="navigation_menu3">下载</string>
+	<string name="navigation_menu6">意见反馈</string>
+	<string name="navigation_menu5">分享</string>
+
+</resources>
