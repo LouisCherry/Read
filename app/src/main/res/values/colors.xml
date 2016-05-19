@@ -20,6 +20,7 @@
 <resources>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorPrimaryDarker">#2d3b96</color>
     <color name="colorAccent">#FF4081</color>
     <color name="transparent">#00000000</color>
     <color name="white">#ffffff</color>
@@ -42,5 +43,9 @@
     <color name="main_bg_1">#fdf7d5</color>
     <color name="main_bg_2">#668564</color>
     <color name="main_bg_3">#997c56</color>
-
+    <color name="iron">#CCCCCC</color>
+    <color name="primary">#E43F3F</color>
+    <color name="primary_dark">#E12929</color>
+    <color name="primary_darker">#CC1D1D</color>
+    <color name="accent">#FFFFFF</color>
 </resources>

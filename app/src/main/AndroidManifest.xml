@@ -35,10 +35,17 @@
         <activity android:name="com.read.pan.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="com.read.pan.activity.LoginActivity"
+            android:theme="@style/AppTheme.Dark"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name="com.read.pan.activity.SignupActivity"
+            android:theme="@style/AppTheme.Dark"
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name="com.yamin.reader.activity.MainActivity"
             android:process=":library"
@@ -60,10 +67,10 @@
                 android:resource="@xml/searchable" />
         </activity>
         <activity
-            android:name=".activity.BookFavoriteActivity"
+            android:name="com.yamin.reader.activity.BookFavoriteActivity"
             android:screenOrientation="portrait"></activity>
         <activity
-            android:name=".activity.FileSearchResultActivity"
+            android:name="com.yamin.reader.activity.FileSearchResultActivity"
             android:screenOrientation="portrait"></activity>
         <!-- Points to searchable activity so the whole app can invoke search. -->
         <meta-data
@@ -244,9 +251,6 @@
             android:name="com.yamin.reader.database.BookContentProvider"
             android:authorities="com.yamin.reader.BookContentProvider" />
 
-        <activity
-            android:name=".LoginActivity"
-            android:label="@string/title_activity_login"></activity>
     </application>
 
 </manifest>

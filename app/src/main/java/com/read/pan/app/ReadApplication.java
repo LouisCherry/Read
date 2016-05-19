@@ -14,7 +14,6 @@ public class ReadApplication extends ZLAndroidApplication{
     private static ReadApplication instance;
     private boolean login;
     private String loginUid;
-    private static Stack<String> history=new Stack<String>();
     @Override
     public void onCreate() {
         super.onCreate();
@@ -22,7 +21,7 @@ public class ReadApplication extends ZLAndroidApplication{
     }
     private void initLogin() {
         User user = getLoginUser();
-        if (null != user && user.getUserId()!=null&&!user.getUserId().equals("")) {
+        if (null != user && user.getUserId()!=null) {
             login = true;
             loginUid = user.getUserId();
         } else {

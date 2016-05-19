@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.read.pan.activity.LoginActivity;
 import com.read.pan.adapter.FragmentAdapter;
 import com.read.pan.app.ReadApplication;
 import com.read.pan.fragment.BookshelfFragment;
@@ -135,8 +136,8 @@ public class MainActivity extends AppCompatActivity
         avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                if(application.isLogin()){
-
+                if(!application.isLogin()){
+                    startActivity(new Intent(getBaseContext(), LoginActivity.class));
                 }
 //                RestClient.userApi().login("123","123").enqueue(new Callback<ResponseBody>() {
 //                    @Override
