@@ -1,5 +1,7 @@
 package com.read.pan.network.api;
 
+import com.read.pan.entity.User;
+
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -20,7 +22,7 @@ public interface UserApi {
      * @param username 用户名
      * @param pass 密码
      */
-    Call<ResponseBody> login(@Field("username")String username, @Field("password") String pass);
+    Call<User> login(@Field("username")String username, @Field("password") String pass);
 
     @FormUrlEncoded
     @POST("user/regist")
@@ -30,7 +32,7 @@ public interface UserApi {
      * @param  pass 密码
      * @param email 邮箱
      */
-    void regist(@Field("username")String username,@Field("password") String pass,
+    Call<ResponseBody> regist(@Field("username")String username,@Field("password") String pass,
                 @Field("email")String email);
 
     @Multipart
@@ -42,6 +44,6 @@ public interface UserApi {
      * @param userId 用户id
      * @param avater 头像
      */
-    void update(@Part("username")String username, @Part("password") String pass,
+    Call<ResponseBody> update(@Part("username")String username, @Part("password") String pass,
                 @Part("userId")String userId, @Part("avatar")RequestBody avatar);
 }

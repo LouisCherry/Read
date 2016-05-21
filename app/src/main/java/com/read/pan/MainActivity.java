@@ -18,10 +18,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.read.pan.activity.LoginActivity;
 import com.read.pan.adapter.FragmentAdapter;
 import com.read.pan.app.ReadApplication;
+import com.read.pan.entity.User;
 import com.read.pan.fragment.BookshelfFragment;
 import com.read.pan.fragment.StoreFragment;
 import com.yamin.reader.activity.FileBrowserActivity;
@@ -55,6 +57,7 @@ public class MainActivity extends AppCompatActivity
     @BindView(R.id.view_pager)
     ViewPager viewPager;
     ImageView avatar;
+    TextView navUsername;
     List<String> tablayoutTitle;
     List<Fragment> viewPagerFragments;
     ReadApplication application;
@@ -107,6 +110,12 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onResume() {
+        if(application.isLogin()){
+            User user=application.getLoginUser();
+            if(user!=null){
+                navUsername.setText(user.getUserName());
+            }
+        }
         super.onResume();
     }
 
@@ -133,30 +142,13 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
         View navHeadView=navView.getHeaderView(0);
         avatar= (ImageView) navHeadView.findViewById(R.id.nav_avatar);
+        navUsername= (TextView) navHeadView.findViewById(R.id.nav_username);
         avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
                 if(!application.isLogin()){
                     startActivity(new Intent(getBaseContext(), LoginActivity.class));
                 }
-//                RestClient.userApi().login("123","123").enqueue(new Callback<ResponseBody>() {
-//                    @Override
-//                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-//                        if(response.code()== ResultCode.SUCCESS){
-//                            Snackbar.make(v,"登录成功",Snackbar.LENGTH_SHORT).setAction("action",null).show();
-//                        }
-//                        if(response.code()==ResultCode.USERNOTEXIST){
-//                            Snackbar.make(v,"用户名不存在",Snackbar.LENGTH_SHORT).setAction("action",null).show();
-//                        }
-//                        if(response.code()==ResultCode.PASSWRONG){
-//                            Snackbar.make(v,"密码错误",Snackbar.LENGTH_SHORT).setAction("action",null).show();
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-//                    }
-//                });
             }
         });
     }

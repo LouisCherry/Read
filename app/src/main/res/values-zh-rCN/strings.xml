@@ -48,4 +48,8 @@
 	<string name="share_book">分享</string>
 	<string name="del_book">删除</string>
 	<string name="eit_book">编辑</string>
+	<string name="userName">用户名</string>
+	<string name="password">密码</string>
+	<string name="email">邮箱</string>
+	<string name="signin">请登录</string>
 </resources>

@@ -8,7 +8,7 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
+import android.util.Patterns;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -18,148 +18,123 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.read.pan.R;
-import com.read.pan.app.ReadApplication;
-import com.read.pan.entity.User;
 import com.read.pan.network.RestClient;
 import com.read.pan.network.ResultCode;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class LoginActivity extends AppCompatActivity{
-    private static final String TAG = "LoginActivity";
-    private static final int REQUEST_SIGNUP = 0;
-    ReadApplication readApplication;
+public class SignupActivity extends AppCompatActivity {
+    private static final String TAG = "SignupActivity";
+
+    @BindView(R.id.input_name)
+    EditText _nameText;
     @BindView(R.id.input_email)
     EditText _emailText;
     @BindView(R.id.input_password)
     EditText _passwordText;
-    @BindView(R.id.btn_login)
-    Button _loginButton;
-    @BindView(R.id.link_signup)
-    TextView _signupLink;
+    @BindView(R.id.btn_signup)
+    Button _signupButton;
+    @BindView(R.id.link_login)
+    TextView _loginLink;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    ProgressDialog progressDialog=null;
+     ProgressDialog progressDialog =null;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_signup);
         ButterKnife.bind(this);
-        readApplication= (ReadApplication) getApplication();
         setSupportActionBar(toolbar);
-        progressDialog=new ProgressDialog(LoginActivity.this,
-                R.style.AppTheme_Dark_Dialog);
         this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         this.getSupportActionBar().setDisplayShowTitleEnabled(false);
-        _loginButton.setOnClickListener(new View.OnClickListener() {
-
+        _signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                login(v);
+                signup(v);
             }
         });
-        _signupLink.setOnClickListener(new View.OnClickListener() {
 
+        _loginLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Start the Signup activity
-                Intent intent = new Intent(getApplicationContext(), SignupActivity.class);
-                startActivityForResult(intent, REQUEST_SIGNUP);
+                // Finish the registration screen and return to the Login activity
+                finish();
             }
         });
     }
 
-    @Override
-    protected void onResume() {
-        _loginButton.setEnabled(true);
-        super.onResume();
-    }
+    public void signup(final View v) {
 
-    public void login(final View v) {
         if (!validate()) {
-            onLoginFailed();
+            onSignupFailed();
             return;
         }
 
-        _loginButton.setEnabled(false);
+        _signupButton.setEnabled(false);
 
-
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Authenticating...");
+        progressDialog = new ProgressDialog(SignupActivity.this,
+                R.style.AppTheme_Dark_Dialog);
+        progressDialog.setIndeterminate(true);progressDialog.setMessage("Creating Account...");
         progressDialog.setOnCancelListener(cancelListener);
         progressDialog.show();
 
-        String userName = _emailText.getText().toString();
+        String name = _nameText.getText().toString();
+        String email = _emailText.getText().toString();
         String password = _passwordText.getText().toString();
-
-        RestClient.userApi().login(userName, password).enqueue(new Callback<User>() {
+        RestClient.userApi().regist(name,password,email).enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onResponse(Call<User> call, Response<User> response) {
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.code() == ResultCode.SUCCESS) {
-                    User user=response.body();
-                    onLoginSuccess(user);
+                    onSignupSuccess();
                 }
-                if (response.code() == ResultCode.USERNOTEXIST) {
-                    Snackbar.make(v, "用户名不存在", Snackbar.LENGTH_SHORT).setAction("action", null).show();
-                    onLoginFailed();
-                }
-                if (response.code() == ResultCode.PASSWRONG) {
-                    Snackbar.make(v, "密码错误", Snackbar.LENGTH_SHORT).setAction("action", null).show();
-                    onLoginFailed();
+                if (response.code() == ResultCode.USERNAMEEXIST) {
+                    Snackbar.make(v, "用户名已存在", Snackbar.LENGTH_SHORT).setAction("action", null).show();
+                    onSignupFailed();
                 }
             }
 
             @Override
-            public void onFailure(Call<User> call, Throwable t) {
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
                 Snackbar.make(v, "网络连接失败", Snackbar.LENGTH_SHORT).setAction("action", null).show();
-                Log.i("login",t.getMessage());
-                onLoginFailed();
+                onSignupFailed();
             }
         });
     }
 
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_SIGNUP) {
-            if (resultCode == RESULT_OK) {
-
-                // TODO: Implement successful signup logic here
-                // By default we just finish the Activity and log them in automatically
-                this.finish();
-            }
-        }
-    }
-
-    @Override
-    public void onBackPressed() {
-        // Disable going back to the MainActivity
-        moveTaskToBack(true);
-    }
-
-    public void onLoginSuccess(User user) {
-        _loginButton.setEnabled(true);
-        readApplication.saveUserInfo(user);
+    public void onSignupSuccess() {
+        _signupButton.setEnabled(true);
+        setResult(RESULT_OK, null);
+        startActivity(new Intent(getBaseContext(),LoginActivity.class));
         finish();
     }
 
-    public void onLoginFailed() {
-        _loginButton.setEnabled(true);
+    public void onSignupFailed() {
+        _signupButton.setEnabled(true);
         progressDialog.dismiss();
     }
 
     public boolean validate() {
         boolean valid = true;
 
+        String name = _nameText.getText().toString();
         String email = _emailText.getText().toString();
         String password = _passwordText.getText().toString();
 
-        if (email.isEmpty() || email.length() < 3 || email.length() > 10) {
-            _emailText.setError("between 3 and 10 alphanumeric characters");
+        if (name.isEmpty() || name.length() < 3) {
+            _nameText.setError("at least 3 characters");
+            valid = false;
+        } else {
+            _nameText.setError(null);
+        }
+
+        if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            _emailText.setError("enter a valid email address");
             valid = false;
         } else {
             _emailText.setError(null);
@@ -174,10 +149,9 @@ public class LoginActivity extends AppCompatActivity{
 
         return valid;
     }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
+        switch (item.getItemId()){
             case android.R.id.home:
                 finish();
                 break;
@@ -186,12 +160,6 @@ public class LoginActivity extends AppCompatActivity{
         }
         return super.onOptionsItemSelected(item);
     }
-    private DialogInterface.OnCancelListener cancelListener=new DialogInterface.OnCancelListener() {
-        @Override
-        public void onCancel(DialogInterface dialog) {
-            _loginButton.setEnabled(true);
-        }
-    };
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
         InputMethodManager manager = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -204,4 +172,10 @@ public class LoginActivity extends AppCompatActivity{
         }
         return super.dispatchTouchEvent(event);
     }
+    private DialogInterface.OnCancelListener cancelListener=new DialogInterface.OnCancelListener() {
+        @Override
+        public void onCancel(DialogInterface dialog) {
+            _signupButton.setEnabled(true);
+        }
+    };
 }

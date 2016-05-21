@@ -1,11 +1,14 @@
 package com.read.pan.app;
 
 import com.read.pan.entity.User;
+import com.read.pan.util.CyptoUtils;
 
 import org.geometerplus.zlibrary.ui.android.library.ZLAndroidApplication;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Properties;
-import java.util.Stack;
 
 /**
  * Created by pan on 2016/5/18.
@@ -34,14 +37,27 @@ public class ReadApplication extends ZLAndroidApplication{
      */
     public User getLoginUser() {
         User user = new User();
-//        user.setUserId(getProperty("user.uid"));
-//        user.setUserName(getProperty("user.name"));
-//        user.setPic(getProperty("user.face"));
-//        user.setLocation(getProperty("user.location"));
-//        user.setFollowsNum(StringUtils.toInt(getProperty("user.followers"), 0));
-//        user.setFansNum(StringUtils.toInt(getProperty("user.fans"), 0));
-//        user.setGender(getProperty("user.gender"));
-//        user.setEmail(getProperty("user.email"));
+        user.setUserId(getProperty("user.uid"));
+        user.setUserName(getProperty("user.name"));
+        String gender=getProperty("user.gender");
+        if(gender!=null)
+            user.setGender(Integer.parseInt(gender));
+        SimpleDateFormat formt=new SimpleDateFormat("yyyyMMdd");
+        String birthday=getProperty("user.birthday");
+        if(birthday!=null){
+            Date date= null;
+            try {
+                date = formt.parse(birthday);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            user.setBirthday(date);
+        }
+        user.setPhone(getProperty("user.phone"));
+        user.setSaying(getProperty("user.saying"));
+        user.setPass(getProperty("user.pwd"));
+        user.setAvatar(getProperty("user.face"));
+        user.setEmail(getProperty("user.email"));
         return user;
     }
     /**
@@ -68,27 +84,33 @@ public class ReadApplication extends ZLAndroidApplication{
     /**
      * 保存登录信息
      *
-     * @param username
-     * @param pwd
      */
-    @SuppressWarnings("serial")
     public void saveUserInfo(final User user) {
         this.loginUid = user.getUserId();
         this.login = true;
         setProperties(new Properties() {
             {
-//                setProperty("user.uid", String.valueOf(user.getUserId()));
-//                setProperty("user.name", user.getUserName());
-//                setProperty("user.face", user.getPic());// 用户头像-文件名
-//                setProperty("user.pwd",
-//                        CyptoUtils.encode("letuTravelApp", user.getPassword()));
-//                setProperty("user.email",
-//                        String.valueOf(user.getEmail()));
-//                setProperty("user.followers",
-//                        String.valueOf(user.getFollowsNum()));
-//                setProperty("user.fans", String.valueOf(user.getFansNum()));
-//                setProperty("user.gender", String.valueOf(user.getGender()));
-//                setProperty("user.location", user.getLocation());
+                setProperty("user.uid",user.getUserId());
+                setProperty("user.name", user.getUserName());
+                setProperty("user.gender", String.valueOf(user.getGender()));
+                if(user.getBirthday()!=null){
+                    SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    Date date=user.getBirthday();
+                    String birthday=sdf.format(date);
+                    setProperty("user.birthday", birthday);
+                }
+                if(user.getPhone()!=null)
+                    setProperty("user.phone", String.valueOf(user.getPhone()));
+                if(user.getSaying()!=null)
+                    setProperty("user.saying",
+                            String.valueOf(user.getSaying()));
+                setProperty("user.pwd",
+                        CyptoUtils.encode("Read", user.getPass()));
+                if(user.getAvatar()!=null)
+                    setProperty("user.face", user.getAvatar());
+                if(user.getEmail()!=null)
+                    setProperty("user.email",
+                            String.valueOf(user.getEmail()));
             }
         });
     }

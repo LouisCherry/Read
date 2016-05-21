@@ -13,6 +13,9 @@
 	<string name="navigation_menu4">Setting</string>
 	<string name="navigation_menu5">Share</string>
 	<string name="navigation_menu6">Feedback</string>
-
+	<string name="userName">userName</string>
+	<string name="password">Password</string>
+	<string name="email">Email</string>
+	<string name="signin">Sign in</string>
 
 </resources>
