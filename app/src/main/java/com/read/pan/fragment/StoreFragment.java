@@ -40,7 +40,7 @@ import retrofit2.Response;
  * Use the {@link StoreFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class StoreFragment extends Fragment {
+public class StoreFragment extends Fragment{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -57,18 +57,23 @@ public class StoreFragment extends Fragment {
     private static final int NONET = 101;
     private OnFragmentInteractionListener mListener;
     private BookStoreAdapter bookStoreAdapter;
-    private ArrayList<Book> books;
-
+    private ArrayList<Book> books=new ArrayList<>();
+    //分页起始位置
+    private int offset;
+    //分页一页的条数
+    private int limit = 5;
+    private final int REFRESH=1;
+    private View rootView;
     public StoreFragment() {
         // Required empty public constructor
     }
-
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             // TODO Auto-generated method stub
             switch (msg.what) {
-                case 0:
+                case REFRESH:
+                    bookStoreAdapter.notifyDataSetChanged();
                     refresher.setRefreshing(false);
                     break;
                 case NONET:
@@ -80,7 +85,6 @@ public class StoreFragment extends Fragment {
             super.handleMessage(msg);
         }
     };
-
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -107,18 +111,24 @@ public class StoreFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_store, container, false);
-        ButterKnife.bind(this, view);
-        init(view);
-        return view;
+        rootView= inflater.inflate(R.layout.fragment_store, container, false);
+        ButterKnife.bind(this, rootView);
+        init(rootView);
+        return rootView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        refreshData(rootView,0);
     }
 
     private void init(final View view) {
+        offset = 0;
         //给Recycler设置gridView布局
         gridLayoutManager = new GridLayoutManager(getContext(), 1);
         storeRecycler.setLayoutManager(gridLayoutManager);
@@ -126,21 +136,18 @@ public class StoreFragment extends Fragment {
         storeRecycler.setHasFixedSize(true);
         //设置Item增加、移除动画
         storeRecycler.setItemAnimator(new DefaultItemAnimator());
-        books = new ArrayList<>();
         bookStoreAdapter = new BookStoreAdapter(getContext(), books);
         storeRecycler.setAdapter(bookStoreAdapter);
         //scroollListener在不使用时，要记得移除
         storeRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            int lastVisibleItem = -1;
-
+            int lastVisibleItem=-1;
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 if (newState == RecyclerView.SCROLL_STATE_IDLE
                         && lastVisibleItem + 1 == bookStoreAdapter.getItemCount()) {
-                    refresher.setRefreshing(true);
-                    // 此处在现实项目中，请换成网络请求数据代码，sendRequest .....
-                    mHandler.sendEmptyMessageDelayed(0, 3000);
+                    offset=lastVisibleItem+1;
+                    refreshData(rootView,offset);
                 }
             }
 
@@ -148,6 +155,17 @@ public class StoreFragment extends Fragment {
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 lastVisibleItem = gridLayoutManager.findLastVisibleItemPosition();
+            }
+        });
+        bookStoreAdapter.setOnItemClickLitener(new BookStoreAdapter.OnItemClickLitener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Snackbar.make(rootView,books.get(position).getBookName(),Snackbar.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onItemLongClick(View view, int position) {
+
             }
         });
         refresher.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -158,27 +176,7 @@ public class StoreFragment extends Fragment {
                     message.what = NONET;
                     mHandler.sendMessage(message);
                 } else {
-                    RestClient.bookApi().topList(0, 10).enqueue(new Callback<List<Book>>() {
-                        @Override
-                        public void onResponse(Call<List<Book>> call, Response<List<Book>> response) {
-                            int code = response.code();
-                            if (code == ResultCode.SUCCESS) {
-                                List<Book> books = response.body();
-                                Snackbar.make(view, books.size()+"", Snackbar.LENGTH_SHORT).setAction("action", null).show();
-                                refresher.setRefreshing(false);
-                            }
-                            if (code == ResultCode.EMPTYLIST) {
-                                Snackbar.make(view, "暂无更多信息", Snackbar.LENGTH_SHORT).setAction("action", null).show();
-                                refresher.setRefreshing(false);
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<List<Book>> call, Throwable t) {
-                            Snackbar.make(view, "网络连接失败", Snackbar.LENGTH_SHORT).setAction("action", null).show();
-                            refresher.setRefreshing(false);
-                        }
-                    });
+                    refreshData(rootView,0);
                 }
             }
         });
@@ -213,7 +211,7 @@ public class StoreFragment extends Fragment {
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p/>
+     * <p>
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
@@ -221,5 +219,35 @@ public class StoreFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+    private void refreshData(final View rootView,int offset){
+        if(offset==0){
+            books.clear();
+        }
+        refresher.setRefreshing(true);
+        RestClient.bookApi().topList(offset, limit).enqueue(new Callback<List<Book>>() {
+            @Override
+            public void onResponse(Call<List<Book>> call, Response<List<Book>> response) {
+                int code = response.code();
+                if (code == ResultCode.SUCCESS) {
+                    List<Book> books1 = response.body();
+                    books.addAll(books1);
+//                    bookStoreAdapter.setmData(books);
+                    Message message = new Message();
+                    message.what = REFRESH;
+                    mHandler.sendMessage(message);
+                }
+                if (code == ResultCode.EMPTYLIST) {
+                    Snackbar.make(rootView, "暂无更多信息", Snackbar.LENGTH_SHORT).setAction("action", null).show();
+                    refresher.setRefreshing(false);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Book>> call, Throwable t) {
+                Snackbar.make(rootView, "网络连接失败", Snackbar.LENGTH_SHORT).setAction("action", null).show();
+                refresher.setRefreshing(false);
+            }
+        });
     }
 }

@@ -4,4 +4,11 @@
 		<attr name="adSize" format="integer" />
 		<attr name="adId" format="string" />
 	</declare-styleable>
+	<declare-styleable name="SwipyRefreshLayout">
+		<attr name="direction">
+			<enum name="top" value="0" />
+			<enum name="bottom" value="1" />
+			<enum name="both" value="2" />
+		</attr>
+	</declare-styleable>
 </resources>
