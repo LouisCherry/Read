@@ -16,7 +16,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -216,24 +215,5 @@ public class MainActivity extends AppCompatActivity
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-    //用于实现fragment能够调用ontouchevent方法
-    private ArrayList<MyOnTouchListener> onTouchListeners = new ArrayList<MyOnTouchListener>(10);
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
-        for (MyOnTouchListener listener : onTouchListeners) {
-            listener.onTouch(ev);
-        }
-        return super.dispatchTouchEvent(ev);
-    }
-
-    public void registerMyOnTouchListener(MyOnTouchListener myOnTouchListener) {
-        onTouchListeners.add(myOnTouchListener);
-    }
-    public void unregisterMyOnTouchListener(MyOnTouchListener myOnTouchListener) {
-        onTouchListeners.remove(myOnTouchListener) ;
-    }
-    public interface MyOnTouchListener {
-        public boolean onTouch(MotionEvent ev);
     }
 }
