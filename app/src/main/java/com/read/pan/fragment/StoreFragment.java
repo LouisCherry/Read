@@ -1,6 +1,7 @@
 package com.read.pan.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -16,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.read.pan.R;
+import com.read.pan.activity.BookDeatilActivity;
 import com.read.pan.adapter.BookStoreAdapter;
 import com.read.pan.entity.Book;
 import com.read.pan.network.RestClient;
@@ -160,7 +162,9 @@ public class StoreFragment extends Fragment{
         bookStoreAdapter.setOnItemClickLitener(new BookStoreAdapter.OnItemClickLitener() {
             @Override
             public void onItemClick(View view, int position) {
-                Snackbar.make(rootView,books.get(position).getBookName(),Snackbar.LENGTH_SHORT).show();
+                getActivity().startActivity(
+                        new Intent(getContext(), BookDeatilActivity.class)
+                                .putExtra("bookId",books.get(position).getBookId()));
             }
 
             @Override
