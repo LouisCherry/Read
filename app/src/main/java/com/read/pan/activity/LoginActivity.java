@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -116,7 +115,6 @@ public class LoginActivity extends AppCompatActivity{
             @Override
             public void onFailure(Call<User> call, Throwable t) {
                 Snackbar.make(v, "网络连接失败", Snackbar.LENGTH_SHORT).setAction("action", null).show();
-                Log.i("login",t.getMessage());
                 onLoginFailed();
             }
         });

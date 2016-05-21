@@ -18,12 +18,18 @@ import android.view.ViewGroup;
 import com.read.pan.R;
 import com.read.pan.adapter.BookStoreAdapter;
 import com.read.pan.entity.Book;
+import com.read.pan.network.RestClient;
+import com.read.pan.network.ResultCode;
 import com.read.pan.util.SystemUtil;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 /**
@@ -39,22 +45,24 @@ public class StoreFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    @BindView(R.id.refresher)
-    SwipeRefreshLayout refresher;
+    GridLayoutManager gridLayoutManager;
     @BindView(R.id.store_recycler)
     RecyclerView storeRecycler;
-    GridLayoutManager gridLayoutManager;
+    @BindView(R.id.refresher)
+    SwipeRefreshLayout refresher;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
     //无网状态
-    private static final int NONET=101;
+    private static final int NONET = 101;
     private OnFragmentInteractionListener mListener;
     private BookStoreAdapter bookStoreAdapter;
     private ArrayList<Book> books;
+
     public StoreFragment() {
         // Required empty public constructor
     }
+
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -72,6 +80,7 @@ public class StoreFragment extends Fragment {
             super.handleMessage(msg);
         }
     };
+
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -105,24 +114,25 @@ public class StoreFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_store, container, false);
         ButterKnife.bind(this, view);
-        init();
+        init(view);
         return view;
     }
 
-    private void init() {
+    private void init(final View view) {
         //给Recycler设置gridView布局
-        gridLayoutManager=new GridLayoutManager(getContext(),1);
+        gridLayoutManager = new GridLayoutManager(getContext(), 1);
         storeRecycler.setLayoutManager(gridLayoutManager);
         //如果可以确定每个item的高度是固定的，设置这个选项可以提高性能
         storeRecycler.setHasFixedSize(true);
         //设置Item增加、移除动画
         storeRecycler.setItemAnimator(new DefaultItemAnimator());
-        books=new ArrayList<>();
-        bookStoreAdapter=new BookStoreAdapter(getContext(),books);
+        books = new ArrayList<>();
+        bookStoreAdapter = new BookStoreAdapter(getContext(), books);
         storeRecycler.setAdapter(bookStoreAdapter);
         //scroollListener在不使用时，要记得移除
-        storeRecycler.addOnScrollListener(new RecyclerView.OnScrollListener(){
-            int lastVisibleItem=-1;
+        storeRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            int lastVisibleItem = -1;
+
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
@@ -143,10 +153,32 @@ public class StoreFragment extends Fragment {
         refresher.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                if(!SystemUtil.isNetworkAvailable(getActivity())){
+                if (!SystemUtil.isNetworkAvailable(getActivity())) {
                     Message message = new Message();
                     message.what = NONET;
                     mHandler.sendMessage(message);
+                } else {
+                    RestClient.bookApi().topList(0, 10).enqueue(new Callback<List<Book>>() {
+                        @Override
+                        public void onResponse(Call<List<Book>> call, Response<List<Book>> response) {
+                            int code = response.code();
+                            if (code == ResultCode.SUCCESS) {
+                                List<Book> books = response.body();
+                                Snackbar.make(view, books.size()+"", Snackbar.LENGTH_SHORT).setAction("action", null).show();
+                                refresher.setRefreshing(false);
+                            }
+                            if (code == ResultCode.EMPTYLIST) {
+                                Snackbar.make(view, "暂无更多信息", Snackbar.LENGTH_SHORT).setAction("action", null).show();
+                                refresher.setRefreshing(false);
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<List<Book>> call, Throwable t) {
+                            Snackbar.make(view, "网络连接失败", Snackbar.LENGTH_SHORT).setAction("action", null).show();
+                            refresher.setRefreshing(false);
+                        }
+                    });
                 }
             }
         });

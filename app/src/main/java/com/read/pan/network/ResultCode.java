@@ -24,4 +24,20 @@ public class ResultCode {
      * 暂无列表信息
      */
     public static final int EMPTYLIST=204;
+    /**
+     * 文件上传类型不正确
+     */
+    public static final int TYPEWRONG=301;
+    /**
+     * 没有上传权限
+     */
+    public static final int NOUPLOAD=302;
+    /**
+     * 暂无详细信息
+     */
+    public static final int NODETAIL=303;
+    /**
+     * 该书籍不存在
+     */
+    public static final int NOBOOK=304;
 }
