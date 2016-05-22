@@ -29,4 +29,12 @@ public interface BookApi {
      */
     Call<Book> book(@Path("bookId") String bookId);
 
+    @GET("book/like/{name}")
+    /**
+     * 搜索书籍
+     * @param offset 起始位置
+     * @param limit 刷新条数
+     */
+    Call<List<Book>> search(@Path("name") String name,@Query("offset") int offset, @Query("limit") int limit);
+
 }

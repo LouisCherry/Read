@@ -257,6 +257,11 @@
             android:label="@string/title_activity_book_deatil"
             android:theme="@style/AppTheme">
         </activity>
+        <activity
+            android:name=".activity.SearchResultActivity"
+            android:label="@string/title_activity_search_result"
+            android:theme="@style/AppTheme">
+        </activity>
     </application>
 
 </manifest>

@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.quinny898.library.persistentsearch.SearchBox;
 import com.quinny898.library.persistentsearch.SearchResult;
 import com.read.pan.activity.LoginActivity;
+import com.read.pan.activity.SearchResultActivity;
 import com.read.pan.adapter.FragmentAdapter;
 import com.read.pan.app.ReadApplication;
 import com.read.pan.entity.User;
@@ -67,7 +68,6 @@ public class MainActivity extends AppCompatActivity
     ReadApplication application;
     @BindView(R.id.searchbox)
     com.quinny898.library.persistentsearch.SearchBox searchbox;
-
     @Override
     public void onFragmentInteraction(Uri uri) {
     }
@@ -140,7 +140,6 @@ public class MainActivity extends AppCompatActivity
     protected void onDestroy() {
         super.onDestroy();
     }
-
     /**
      * 注册控件监听事件
      */
@@ -274,10 +273,9 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onSearch(String searchTerm) {
-                Toast.makeText(MainActivity.this, searchTerm + " Searched",
-                        Toast.LENGTH_LONG).show();
-                toolbar.setTitle(searchTerm);
-
+                startActivity(
+                        new Intent(getBaseContext(), SearchResultActivity.class)
+                                .putExtra("bookName",searchTerm));
             }
 
             @Override

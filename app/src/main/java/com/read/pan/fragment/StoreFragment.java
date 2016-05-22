@@ -140,51 +140,51 @@ public class StoreFragment extends Fragment{
         storeRecycler.setItemAnimator(new DefaultItemAnimator());
         bookStoreAdapter = new BookStoreAdapter(getContext(), books);
         storeRecycler.setAdapter(bookStoreAdapter);
-        //scroollListener在不使用时，要记得移除
-        storeRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            int lastVisibleItem=-1;
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                if (newState == RecyclerView.SCROLL_STATE_IDLE
-                        && lastVisibleItem + 1 == bookStoreAdapter.getItemCount()) {
-                    offset=lastVisibleItem+1;
-                    refreshData(rootView,offset);
-                }
+    //scroollListener在不使用时，要记得移除
+    storeRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        int lastVisibleItem=-1;
+        @Override
+        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            super.onScrollStateChanged(recyclerView, newState);
+            if (newState == RecyclerView.SCROLL_STATE_IDLE
+                    && lastVisibleItem + 1 == bookStoreAdapter.getItemCount()) {
+                offset=lastVisibleItem+1;
+                refreshData(rootView,offset);
             }
+        }
 
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                lastVisibleItem = gridLayoutManager.findLastVisibleItemPosition();
-            }
-        });
-        bookStoreAdapter.setOnItemClickLitener(new BookStoreAdapter.OnItemClickLitener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                getActivity().startActivity(
-                        new Intent(getContext(), BookDeatilActivity.class)
-                                .putExtra("bookId",books.get(position).getBookId()));
-            }
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            super.onScrolled(recyclerView, dx, dy);
+            lastVisibleItem = gridLayoutManager.findLastVisibleItemPosition();
+        }
+    });
+    bookStoreAdapter.setOnItemClickLitener(new BookStoreAdapter.OnItemClickLitener() {
+        @Override
+        public void onItemClick(View view, int position) {
+            getActivity().startActivity(
+                    new Intent(getContext(), BookDeatilActivity.class)
+                            .putExtra("bookId",books.get(position).getBookId()));
+        }
 
-            @Override
-            public void onItemLongClick(View view, int position) {
+        @Override
+        public void onItemLongClick(View view, int position) {
 
+        }
+    });
+    refresher.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        @Override
+        public void onRefresh() {
+            if (!SystemUtil.isNetworkAvailable(getActivity())) {
+                Message message = new Message();
+                message.what = NONET;
+                mHandler.sendMessage(message);
+            } else {
+                refreshData(rootView,0);
             }
-        });
-        refresher.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                if (!SystemUtil.isNetworkAvailable(getActivity())) {
-                    Message message = new Message();
-                    message.what = NONET;
-                    mHandler.sendMessage(message);
-                } else {
-                    refreshData(rootView,0);
-                }
-            }
-        });
-    }
+        }
+    });
+}
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -236,7 +236,6 @@ public class StoreFragment extends Fragment{
                 if (code == ResultCode.SUCCESS) {
                     List<Book> books1 = response.body();
                     books.addAll(books1);
-//                    bookStoreAdapter.setmData(books);
                     Message message = new Message();
                     message.what = REFRESH;
                     mHandler.sendMessage(message);
