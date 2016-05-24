@@ -145,4 +145,8 @@
     </string>
     <string name="title_activity_search_result">SearchResultActivity</string>
     <string name="logout">Logout</string>
+    <string-array name="chose_avatar">
+        <item>Photo</item>
+        <item>Albums</item>
+    </string-array>
 </resources>
