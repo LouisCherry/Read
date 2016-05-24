@@ -24,10 +24,10 @@ public interface BookApi {
     @GET("book/{bookId}")
     /**
      * 获得书城
-     * @param offset 起始位置
-     * @param limit 刷新条数
+     * @param bookId 起始位置
+     * @param userId 刷新条数
      */
-    Call<Book> book(@Path("bookId") String bookId);
+    Call<Book> book(@Path("bookId") String bookId,@Query("userId") String userId);
 
     @GET("book/like/{name}")
     /**

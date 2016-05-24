@@ -18,14 +18,16 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.quinny898.library.persistentsearch.SearchBox;
 import com.quinny898.library.persistentsearch.SearchResult;
+import com.read.pan.activity.CollectActivity;
 import com.read.pan.activity.LoginActivity;
 import com.read.pan.activity.SearchResultActivity;
+import com.read.pan.activity.UserInfoActivity;
 import com.read.pan.adapter.FragmentAdapter;
 import com.read.pan.app.ReadApplication;
 import com.read.pan.entity.User;
@@ -61,7 +63,7 @@ public class MainActivity extends AppCompatActivity
     TabLayout tabLayout;
     @BindView(R.id.view_pager)
     ViewPager viewPager;
-    ImageView avatar;
+    SimpleDraweeView avatar;
     TextView navUsername;
     List<String> tablayoutTitle;
     List<Fragment> viewPagerFragments;
@@ -157,13 +159,15 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         View navHeadView = navView.getHeaderView(0);
-        avatar = (ImageView) navHeadView.findViewById(R.id.nav_avatar);
+        avatar = (SimpleDraweeView) navHeadView.findViewById(R.id.nav_avatar);
         navUsername = (TextView) navHeadView.findViewById(R.id.nav_username);
         avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
                 if (!application.isLogin()) {
                     startActivity(new Intent(getBaseContext(), LoginActivity.class));
+                }else{
+                    startActivity(new Intent(getBaseContext(), UserInfoActivity.class));
                 }
             }
         });
@@ -215,6 +219,8 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.nav_like:
                 //喜欢的图书
+                intent=new Intent(this, CollectActivity.class);
+                startActivity(intent);
                 break;
             case R.id.nav_download:
                 //下载的图书

@@ -52,4 +52,5 @@
 	<string name="password">密码</string>
 	<string name="email">邮箱</string>
 	<string name="signin">请登录</string>
+	<string name="logout">注销</string>
 </resources>

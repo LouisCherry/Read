@@ -122,11 +122,9 @@ public class ReadApplication extends ZLAndroidApplication{
     public void cleanLoginInfo() {
         this.loginUid = "";
         this.login = false;
-        removeProperty("user.uid", "user.name","user.pwd","user.face", "user.location",
-                "user.followers", "user.fans", "user.gender","user.email",
-                "article.articleId","article.numOfday","article.title",
-                "history1","history2","history3","history4","history5","articleTitle",
-                "articleContent");
+        removeProperty("user.uid", "user.name","user.pwd","user.face",
+                "user.gender","user.email","user.birthday",
+                "user.phone","user.saying");
     }
     /**
      * 用户注销

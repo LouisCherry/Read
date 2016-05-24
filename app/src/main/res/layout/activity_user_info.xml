@@ -10,14 +10,12 @@
     tools:context="com.read.pan.activity.BookDeatilActivity">
 
     <android.support.design.widget.AppBarLayout
-        android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/app_bar_height"
         android:fitsSystemWindows="true"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.design.widget.CollapsingToolbarLayout
-            android:id="@+id/toolbar_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
@@ -30,18 +28,12 @@
                 android:orientation="horizontal"
                 android:padding="5dp">
                 <com.facebook.drawee.view.SimpleDraweeView
-                    android:id="@+id/book_detail_img"
+                    android:id="@+id/userInfo_img"
                     android:layout_width="120dp"
                     android:layout_height="180dp"
                     fresco:placeholderImage="@drawable/file_icon_default"
-                    android:layout_gravity="center_vertical|left" />
-                <TextView
-                    android:id="@+id/book_title"
-                    android:layout_width="0dp"
-                    android:layout_height="100dp"
-                    android:layout_weight="1"
-                    android:gravity="right|center_vertical"
-                    android:textSize="21sp" />
+                    android:layout_gravity="center_vertical|left"
+                    fresco:roundAsCircle="true"/>
             </LinearLayout>
 
             <android.support.v7.widget.Toolbar
@@ -54,15 +46,23 @@
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_book_deatil"/>
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:context="com.read.pan.activity.BookDeatilActivity"
+        tools:showIn="@layout/activity_book_deatil">
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
+        <android.support.v7.widget.AppCompatButton
+        android:id="@+id/btn_logout"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/ic_file_download_white_48dp"
-        app:layout_anchor="@id/app_bar"
-        app:layout_anchorGravity="bottom|end"/>
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="24dp"
+        android:padding="12dp"
+        android:gravity="center"
+        android:theme="@style/AppTheme.Dark"
+        android:text="@string/logout"/>
+    </android.support.v4.widget.NestedScrollView>
 
 </android.support.design.widget.CoordinatorLayout>

@@ -80,6 +80,11 @@ public class Book {
      * 上传用户id
      */
     private String userId;
+
+    /**
+     * 是否已经收藏
+     */
+    private int ifCollect;
     public Book(){}
 
     public Book(String bookName, String author, long size, String tips, int type,
@@ -100,6 +105,14 @@ public class Book {
         this.numOfComment=0;
         this.star=0;
         this.uploadTime=new Date(System.currentTimeMillis());
+    }
+
+    public int getIfCollect() {
+        return ifCollect;
+    }
+
+    public void setIfCollect(int ifCollect) {
+        this.ifCollect = ifCollect;
     }
 
     public String getUserId() {
