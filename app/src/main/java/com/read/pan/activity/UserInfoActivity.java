@@ -5,11 +5,14 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.MediaStore;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -18,11 +21,19 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.read.pan.MainActivity;
 import com.read.pan.R;
 import com.read.pan.app.ReadApplication;
+import com.read.pan.entity.User;
+import com.read.pan.network.RestClient;
+import com.read.pan.network.ResultCode;
 
 import java.io.File;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class UserInfoActivity extends AppCompatActivity {
     @BindView(R.id.userInfo_img)
@@ -33,7 +44,31 @@ public class UserInfoActivity extends AppCompatActivity {
     AppCompatButton btnLogout;
     private ReadApplication readApplication;
     private Uri imageUri;
-
+    private final int REFRESH=1;
+    //无网状态
+    private static final int NONET = 101;
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            // TODO Auto-generated method stub
+            switch (msg.what) {
+                case REFRESH:
+                    if(readApplication.isLogin()){
+                        User user=readApplication.getLoginUser();
+                        if(user.getAvatar()!=null){
+                            Uri uri=Uri.parse(user.getAvatar());
+                            userInfoImg.setImageURI(uri);
+                        }
+                    }
+                    break;
+                case NONET:
+                    Snackbar.make(getWindow().getDecorView(), "请检查网络", Snackbar.LENGTH_SHORT)
+                            .setAction("Action", null).show();
+                    break;
+            }
+            super.handleMessage(msg);
+        }
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,10 +91,15 @@ public class UserInfoActivity extends AppCompatActivity {
                 }
             }
         });
+        User user=readApplication.getLoginUser();
+        if(user.getAvatar()!=null){
+            Uri uri=Uri.parse(user.getAvatar());
+            userInfoImg.setImageURI(uri);
+        }
         userInfoImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new MaterialDialog.Builder(getBaseContext())
+                new MaterialDialog.Builder(UserInfoActivity.this)
                         .items(R.array.chose_avatar)
                         .itemsCallback(new MaterialDialog.ListCallback(){
 
@@ -129,11 +169,8 @@ public class UserInfoActivity extends AppCompatActivity {
                     break;
                 case 3:
                     if (data != null) {
-                        //                        showLoadingDialog();
-                        Bundle bundle = data.getExtras();
-                        Bitmap myBitmap = bundle.getParcelable("data");
-                        //                        uploadHeadImg();
-                        //                        imageview.setImageBitmap(myBitmap);
+                        Bitmap myBitmap = data.getParcelableExtra("data");
+                        updateAvatar();
                     }
                     break;
                 default:
@@ -141,7 +178,37 @@ public class UserInfoActivity extends AppCompatActivity {
             }
         }
     }
+    //更改头像
+    public void updateAvatar(){
+        File sdcardDir = Environment.getExternalStorageDirectory();
+        String picPath = sdcardDir.getPath()
+                + "/Read/images/myheadimg.jpg";
+        if(readApplication.isLogin()){
+            final User user=readApplication.getLoginUser();
+            File file=new File(picPath);
+            RequestBody idRequestBody =RequestBody.create(MediaType.parse("text/plain"), user.getUserId());
+            RequestBody photoRequestBody = RequestBody.create(MediaType.parse("image/*"), file);
+            RestClient.userApi().update(null,null,idRequestBody,photoRequestBody).enqueue(new Callback<User>() {
+                @Override
+                public void onResponse(Call<User> call, Response<User> response) {
+                    if(response.code()==ResultCode.SUCCESS){
+                        Snackbar.make(getWindow().getDecorView(), "上传成功", Snackbar.LENGTH_SHORT).setAction("action", null).show();
+                        User user1=response.body();
+                        readApplication.updateUserInfo(user1);
+                        Message msg=new Message();
+                        msg.what = REFRESH;
+                        mHandler.sendMessage(msg);
+                    }
+                }
 
+                @Override
+                public void onFailure(Call<User> call, Throwable t) {
+                    Snackbar.make(getWindow().getDecorView(), "网络连接失败", Snackbar.LENGTH_SHORT).setAction("action", null).show();
+                    Log.i("upload",t.getMessage());
+                }
+            });
+        }
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {

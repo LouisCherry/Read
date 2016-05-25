@@ -71,15 +71,27 @@ public class ReadApplication extends ZLAndroidApplication{
     public void updateUserInfo(final User user) {
         setProperties(new Properties() {
             {
-//                setProperty("user.name", user.getUserName());
-//                setProperty("user.face", user.getPic());// 用户头像-文件名
-//                setProperty("user.followers",
-//                        String.valueOf(user.getFollowsNum()));
-//                setProperty("user.fans", String.valueOf(user.getFansNum()));
-//                setProperty("user.gender", String.valueOf(user.getGender()));
-//                setProperty("user.email",
-//                        String.valueOf(user.getEmail()));
-//                setProperty("user.location", user.getLocation());
+                setProperty("user.uid",user.getUserId());
+                setProperty("user.name", user.getUserName());
+                setProperty("user.gender", String.valueOf(user.getGender()));
+                if(user.getBirthday()!=null){
+                    SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    Date date=user.getBirthday();
+                    String birthday=sdf.format(date);
+                    setProperty("user.birthday", birthday);
+                }
+                if(user.getPhone()!=null)
+                    setProperty("user.phone", String.valueOf(user.getPhone()));
+                if(user.getSaying()!=null)
+                    setProperty("user.saying",
+                            String.valueOf(user.getSaying()));
+                setProperty("user.pwd",
+                        CyptoUtils.encode("Read", user.getPass()));
+                if(user.getAvatar()!=null)
+                    setProperty("user.face", user.getAvatar());
+                if(user.getEmail()!=null)
+                    setProperty("user.email",
+                            String.valueOf(user.getEmail()));
             }
         });
     }

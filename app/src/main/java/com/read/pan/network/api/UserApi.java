@@ -50,8 +50,8 @@ public interface UserApi {
      * @param userId 用户id
      * @param avater 头像
      */
-    Call<ResponseBody> update(@Part("username")String username, @Part("password") String pass,
-                @Part("userId")String userId, @Part("avatar")RequestBody avatar);
+    Call<User> update(@Part("username") RequestBody username, @Part("password") RequestBody pass,
+                @Part("userId")RequestBody userId, @Part("file\";name=\"avatar\";filename=\"pp.png") RequestBody  avatar);
 
     @FormUrlEncoded
     @POST("user/collect/{bookId}")

@@ -134,6 +134,10 @@ public class MainActivity extends AppCompatActivity
             if (user != null) {
                 navUsername.setText(user.getUserName());
             }
+            if(user.getAvatar()!=null){
+                Uri uri=Uri.parse(user.getAvatar());
+                avatar.setImageURI(uri);
+            }
         }
         super.onResume();
     }
