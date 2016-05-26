@@ -16,8 +16,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.read.pan.adapter.BookshelfAdapter;
 import com.read.pan.R;
+import com.read.pan.adapter.BookshelfAdapter;
+import com.read.pan.util.ReadUtils;
 import com.yamin.reader.activity.CoreReadActivity;
 import com.yamin.reader.adapter.ScanFileAdapter;
 import com.yamin.reader.database.DbDataOperation;
@@ -116,29 +117,38 @@ public class BookshelfFragment extends Fragment {
 
     @Override
     public void onStart() {
+        myFBReaderApp = (FBReaderApp) FBReaderApp.Instance();
+        if (myFBReaderApp == null) {
+            myFBReaderApp = new FBReaderApp(getActivity(),
+                    new BookCollectionShadow());
+        }
+        getCollection().bindToService(getActivity(), null);
+        new sdScanAysnTask(3).execute();
         super.onStart();
     }
 
     @Override
     public void onResume() {
-        myFBReaderApp = (FBReaderApp) FBReaderApp.Instance();
-        if (myFBReaderApp == null) {
-            myFBReaderApp = new FBReaderApp(getContext(),
-                    new BookCollectionShadow());
-        }
-        getCollection().bindToService(getContext(), null);
-        new sdScanAysnTask(3).execute();
+//        myFBReaderApp = (FBReaderApp) FBReaderApp.Instance();
+//        if (myFBReaderApp == null) {
+//            myFBReaderApp = new FBReaderApp(getActivity(),
+//                    new BookCollectionShadow());
+//        }
+//        getCollection().bindToService(getActivity(), null);
+//        new sdScanAysnTask(3).execute();
         super.onResume();
     }
 
     @Override
     public void onPause() {
-        getCollection().unbind();
+//        getCollection().unbind();
         super.onPause();
     }
 
     @Override
     public void onDestroy() {
+        super.onDestroy();
+        getCollection().unbind();
         super.onDestroy();
     }
 
@@ -181,13 +191,16 @@ public class BookshelfFragment extends Fragment {
             @Override
             public void onItemClick(View view, int position) {
                 Book b=shelfData.get(position);
-                ZLFile file=ZLFile.createFileByPath(b.getBookPath());
-                org.geometerplus.fbreader.book.Book book = createBookForFile(file);
-                if(book!=null){
-                    CoreReadActivity.openBookActivity(getActivity(), book,
-                            null);
-                    getActivity().overridePendingTransition(
-                            R.anim.activity_enter, R.anim.activity_exit);
+                // File Exist
+                if (ReadUtils.fileIsExists(b.getBookPath())) {
+                    ZLFile file = ZLFile.createFileByPath(b.getBookPath());
+                    org.geometerplus.fbreader.book.Book book = createBookForFile(file);
+                    if (book != null) {
+                        CoreReadActivity.openBookActivity(getActivity(), book,
+                                null);
+                        getActivity().overridePendingTransition(
+                                R.anim.activity_enter, R.anim.activity_exit);
+                    }
                 }
             }
 

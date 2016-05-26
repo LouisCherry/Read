@@ -1,7 +1,6 @@
 package com.read.pan.activity;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,9 +8,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -28,7 +25,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class LoginActivity extends AppCompatActivity{
+public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
     private static final int REQUEST_SIGNUP = 0;
     ReadApplication readApplication;
@@ -42,15 +39,16 @@ public class LoginActivity extends AppCompatActivity{
     TextView _signupLink;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    ProgressDialog progressDialog=null;
+    ProgressDialog progressDialog = null;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
-        readApplication= (ReadApplication) getApplication();
+        readApplication = (ReadApplication) getApplication();
         setSupportActionBar(toolbar);
-        progressDialog=new ProgressDialog(LoginActivity.this,
+        progressDialog = new ProgressDialog(LoginActivity.this,
                 R.style.AppTheme_Dark_Dialog);
         this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         this.getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -99,7 +97,7 @@ public class LoginActivity extends AppCompatActivity{
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 if (response.code() == ResultCode.SUCCESS) {
-                    User user=response.body();
+                    User user = response.body();
                     onLoginSuccess(user);
                 }
                 if (response.code() == ResultCode.USERNOTEXIST) {
@@ -121,23 +119,17 @@ public class LoginActivity extends AppCompatActivity{
     }
 
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_SIGNUP) {
-            if (resultCode == RESULT_OK) {
-
-                // TODO: Implement successful signup logic here
-                // By default we just finish the Activity and log them in automatically
-                this.finish();
-            }
-        }
-    }
-
-    @Override
-    public void onBackPressed() {
-        // Disable going back to the MainActivity
-        moveTaskToBack(true);
-    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        if (requestCode == REQUEST_SIGNUP) {
+//            if (resultCode == RESULT_OK) {
+//
+//                // TODO: Implement successful signup logic here
+//                // By default we just finish the Activity and log them in automatically
+//                this.finish();
+//            }
+//        }
+//    }
 
     public void onLoginSuccess(User user) {
         _loginButton.setEnabled(true);
@@ -184,22 +176,11 @@ public class LoginActivity extends AppCompatActivity{
         }
         return super.onOptionsItemSelected(item);
     }
-    private DialogInterface.OnCancelListener cancelListener=new DialogInterface.OnCancelListener() {
+
+    private DialogInterface.OnCancelListener cancelListener = new DialogInterface.OnCancelListener() {
         @Override
         public void onCancel(DialogInterface dialog) {
             _loginButton.setEnabled(true);
         }
     };
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent event) {
-        InputMethodManager manager = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            if(event.getAction() == MotionEvent.ACTION_DOWN){
-                if(getCurrentFocus()!=null && getCurrentFocus().getWindowToken()!=null){
-                    manager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-                }
-            }
-        }
-        return super.dispatchTouchEvent(event);
-    }
 }
