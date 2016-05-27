@@ -1,7 +1,6 @@
 package com.read.pan.activity;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -20,6 +19,7 @@ import com.read.pan.config.PropertyConfig;
 import com.read.pan.entity.Book;
 import com.read.pan.network.RestClient;
 import com.read.pan.network.ResultCode;
+import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -115,8 +115,9 @@ public class BookDeatilActivity extends AppCompatActivity {
             public void onResponse(Call<Book> call, Response<Book> response) {
                 if(response.code()==ResultCode.SUCCESS){
                     Book book = response.body();
-                    Uri uri = Uri.parse(book.getCover());
-                    bookDetailImg.setImageURI(uri);
+//                    Uri uri = Uri.parse(book.getCover());
+//                    bookDetailImg.setImageURI(uri);
+                    Picasso.with(getBaseContext()).load(book.getCover()).into(bookDetailImg);
                     bookTitle.setText(book.getBookName());
                     ifCollect=book.getIfCollect();
                     if(ifCollect==1){

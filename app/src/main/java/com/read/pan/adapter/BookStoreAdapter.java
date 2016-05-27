@@ -1,7 +1,6 @@
 package com.read.pan.adapter;
 
 import android.content.Context;
-import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +10,7 @@ import android.widget.TextView;
 
 import com.read.pan.R;
 import com.read.pan.entity.Book;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,11 +25,12 @@ public class BookStoreAdapter extends RecyclerView.Adapter<BookStoreAdapter.View
     private ArrayList<Book> mData;
     private LayoutInflater mInflater;
     private int[] itemState;
-
+    private Context context;
     public BookStoreAdapter(Context context, ArrayList<Book> mData) {
         mInflater = LayoutInflater.from(context);
         this.mData = mData;
         itemState = new int[mData.size()];
+        this.context=context;
         init();
     }
 
@@ -45,8 +46,9 @@ public class BookStoreAdapter extends RecyclerView.Adapter<BookStoreAdapter.View
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
         String imguri=mData.get(position).getCover();
-        Uri uri=Uri.parse(imguri);
-        viewHolder.storeTopImg.setImageURI(uri);
+//        Uri uri=Uri.parse(imguri);
+//        viewHolder.storeTopImg.setImageURI(uri);
+        Picasso.with(context).load(imguri).into(viewHolder.storeTopImg);
         viewHolder.storeTopTitle.setText(mData.get(position).getBookName());
         //将数据保存在itemView的Tag中，以便点击时进行获取
         viewHolder.itemView.setTag(mData.get(position));

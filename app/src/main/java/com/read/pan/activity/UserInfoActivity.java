@@ -17,12 +17,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.read.pan.MainActivity;
 import com.read.pan.R;
 import com.read.pan.app.ReadApplication;
 import com.read.pan.entity.User;
 import com.read.pan.network.RestClient;
 import com.read.pan.network.ResultCode;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 
@@ -56,8 +58,9 @@ public class UserInfoActivity extends AppCompatActivity {
                     if(readApplication.isLogin()){
                         User user=readApplication.getLoginUser();
                         if(user.getAvatar()!=null){
-                            Uri uri=Uri.parse(user.getAvatar());
-                            userInfoImg.setImageURI(uri);
+//                            Uri uri=Uri.parse(user.getAvatar());
+//                            userInfoImg.setImageURI(uri);
+                            Picasso.with(getBaseContext()).load(user.getAvatar()).into(userInfoImg);
                         }
                     }
                     break;
@@ -93,31 +96,32 @@ public class UserInfoActivity extends AppCompatActivity {
         });
         User user=readApplication.getLoginUser();
         if(user.getAvatar()!=null){
-            Uri uri=Uri.parse(user.getAvatar());
-            userInfoImg.setImageURI(uri);
+//            Uri uri=Uri.parse(user.getAvatar());
+//            userInfoImg.setImageURI(uri);
+            Picasso.with(getBaseContext()).load(user.getAvatar()).into(userInfoImg);
         }
         userInfoImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                new MaterialDialog.Builder(UserInfoActivity.this)
-//                        .items(R.array.chose_avatar)
-//                        .itemsCallback(new MaterialDialog.ListCallback(){
-//
-//                            @Override
-//                            public void onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
-//                                switch (which){
-//                                    case 0:
-//                                        startCaemra();
-//                                        dialog.dismiss();
-//                                        break;
-//                                    case 1:
-//                                        startGralley();
-//                                        dialog.dismiss();
-//                                        break;
-//                                }
-//                            }
-//                        })
-//                        .show();
+                new MaterialDialog.Builder(UserInfoActivity.this)
+                        .items(R.array.chose_avatar)
+                        .itemsCallback(new MaterialDialog.ListCallback(){
+
+                            @Override
+                            public void onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
+                                switch (which){
+                                    case 0:
+                                        startCaemra();
+                                        dialog.dismiss();
+                                        break;
+                                    case 1:
+                                        startGralley();
+                                        dialog.dismiss();
+                                        break;
+                                }
+                            }
+                        })
+                        .show();
             }
         });
     }
