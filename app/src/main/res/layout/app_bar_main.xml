@@ -13,7 +13,7 @@
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <include layout="@layout/toolbar"/>
-        <com.quinny898.library.persistentsearch.SearchBox
+<!--        <com.quinny898.library.persistentsearch.SearchBox
             android:layout_width="wrap_content"
             android:id="@+id/searchbox"
             android:layout_height="wrap_content"
@@ -22,7 +22,7 @@
             android:layout_marginLeft="-6dp"
             android:layout_marginRight="-6dp"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true" />
+            android:layout_alignParentTop="true" />-->
         <android.support.design.widget.TabLayout
             android:id="@+id/tab_layout"
             android:layout_width="match_parent"
