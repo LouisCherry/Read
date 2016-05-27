@@ -26,11 +26,12 @@ public class BookStoreAdapter extends RecyclerView.Adapter<BookStoreAdapter.View
     private LayoutInflater mInflater;
     private int[] itemState;
     private Context context;
+
     public BookStoreAdapter(Context context, ArrayList<Book> mData) {
         mInflater = LayoutInflater.from(context);
         this.mData = mData;
         itemState = new int[mData.size()];
-        this.context=context;
+        this.context = context;
         init();
     }
 
@@ -45,11 +46,11 @@ public class BookStoreAdapter extends RecyclerView.Adapter<BookStoreAdapter.View
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
-        String imguri=mData.get(position).getCover();
-//        Uri uri=Uri.parse(imguri);
-//        viewHolder.storeTopImg.setImageURI(uri);
+        String imguri = mData.get(position).getCover();
         Picasso.with(context).load(imguri).into(viewHolder.storeTopImg);
         viewHolder.storeTopTitle.setText(mData.get(position).getBookName());
+        viewHolder.storeTopShortIntro.setText(mData.get(position).getShortIntroduction());
+        viewHolder.storeTopAuthor.setText(mData.get(position).getAuthor());
         //将数据保存在itemView的Tag中，以便点击时进行获取
         viewHolder.itemView.setTag(mData.get(position));
     }
@@ -90,9 +91,12 @@ public class BookStoreAdapter extends RecyclerView.Adapter<BookStoreAdapter.View
     public static class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.store_top_img)
         ImageView storeTopImg;
-//        SimpleDraweeView storeTopImg;
         @BindView(R.id.store_top_title)
         TextView storeTopTitle;
+        @BindView(R.id.store_top_shortIntro)
+        TextView storeTopShortIntro;
+        @BindView(R.id.store_top_author)
+        TextView storeTopAuthor;
         public ViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);

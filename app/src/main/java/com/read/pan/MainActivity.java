@@ -121,6 +121,7 @@ public class MainActivity extends AppCompatActivity
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
+                getSupportActionBar().hide();
                 openSearch();
                 return true;
             }
@@ -251,12 +252,12 @@ public class MainActivity extends AppCompatActivity
     public void openSearch() {
         toolbar.setTitle("");
         searchbox.revealFromMenuItem(R.id.action_search, this);
-        for (int x = 0; x < 10; x++) {
-            SearchResult option = new SearchResult("Result "
-                    + Integer.toString(x), getResources().getDrawable(
-                    R.drawable.ic_history));
-            searchbox.addSearchable(option);
-        }
+//        for (int x = 0; x < 10; x++) {
+//            SearchResult option = new SearchResult("Result "
+//                    + Integer.toString(x), getResources().getDrawable(
+//                    R.drawable.ic_history));
+//            searchbox.addSearchable(option);
+//        }
         searchbox.setMenuListener(new SearchBox.MenuListener() {
 
             @Override
@@ -279,12 +280,12 @@ public class MainActivity extends AppCompatActivity
             public void onSearchClosed() {
                 // Use this to un-tint the screen
                 closeSearch();
+                getSupportActionBar().show();
             }
 
             @Override
-            public void onSearchTermChanged() {
-                // React to the search term changing
-                // Called after it has updated results
+            public void onSearchTermChanged(String s) {
+
             }
 
             @Override
@@ -292,6 +293,11 @@ public class MainActivity extends AppCompatActivity
                 startActivity(
                         new Intent(getBaseContext(), SearchResultActivity.class)
                                 .putExtra("bookName",searchTerm));
+            }
+
+            @Override
+            public void onResultClick(SearchResult searchResult) {
+
             }
 
             @Override
@@ -303,10 +309,14 @@ public class MainActivity extends AppCompatActivity
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 1234 && resultCode == RESULT_OK) {
+        if (requestCode == SearchBox.VOICE_RECOGNITION_CODE && resultCode ==RESULT_OK) {
             ArrayList<String> matches = data
                     .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-            searchbox.populateEditText(matches);
+            String resultString="";
+            for(int i=0;i<matches.size();i++){
+                resultString+=matches.get(i);
+            }
+            searchbox.populateEditText(resultString);
         }
         super.onActivityResult(requestCode, resultCode, data);
     }

@@ -10,6 +10,7 @@
     tools:showIn="@layout/activity_book_deatil">
 
     <TextView
+        android:id="@+id/book_introduction"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/text_margin"

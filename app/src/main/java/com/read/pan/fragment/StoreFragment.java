@@ -241,15 +241,19 @@ public class StoreFragment extends Fragment{
                     mHandler.sendMessage(message);
                 }
                 if (code == ResultCode.EMPTYLIST) {
-                    Snackbar.make(rootView, "暂无更多信息", Snackbar.LENGTH_SHORT).setAction("action", null).show();
-                    refresher.setRefreshing(false);
+                    if(rootView!=null){
+                        Snackbar.make(rootView, "暂无更多信息", Snackbar.LENGTH_SHORT).setAction("action", null).show();
+                        refresher.setRefreshing(false);
+                    }
                 }
             }
 
             @Override
             public void onFailure(Call<List<Book>> call, Throwable t) {
-                Snackbar.make(rootView, "网络连接失败", Snackbar.LENGTH_SHORT).setAction("action", null).show();
-                refresher.setRefreshing(false);
+                if(rootView!=null){
+                    Snackbar.make(rootView, "网络连接失败", Snackbar.LENGTH_SHORT).setAction("action", null).show();
+                    refresher.setRefreshing(false);
+                }
             }
         });
     }

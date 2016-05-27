@@ -27,6 +27,7 @@ import com.read.pan.network.RestClient;
 import com.read.pan.network.ResultCode;
 import com.read.pan.util.StringUtil;
 import com.squareup.picasso.Picasso;
+import com.yamin.reader.utils.ToolUtils;
 
 import java.io.File;
 
@@ -41,20 +42,26 @@ public class BookDeatilActivity extends AppCompatActivity {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-//    @BindView(R.id.toolbar_layout)
-//    CollapsingToolbarLayout toolbarLayout;
+    //    @BindView(R.id.toolbar_layout)
+    //    CollapsingToolbarLayout toolbarLayout;
     @BindView(R.id.app_bar)
     AppBarLayout appBar;
     @BindView(R.id.fab)
     FloatingActionButton fab;
     @BindView(R.id.book_detail_img)
     ImageView bookDetailImg;
-//    SimpleDraweeView bookDetailImg;
+    //    SimpleDraweeView bookDetailImg;
     @BindView(R.id.book_title)
     TextView bookTitle;
+    @BindView(R.id.book_author)
+    TextView bookAuthor;
+    @BindView(R.id.book_size)
+    TextView bookSize;
+    @BindView(R.id.book_introduction)
+    TextView bookIntroduction;
     private String bookId;
     ReadApplication readApplication;
-    private int ifCollect=0;
+    private int ifCollect = 0;
     private Book book;
     private DownloadManager downloadManager;
     Handler handler = new Handler() {
@@ -76,7 +83,9 @@ public class BookDeatilActivity extends AppCompatActivity {
             queryState(DownID);
             handler.postDelayed(runnable, step);
         }
-    };
+    }
+
+    ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,21 +102,21 @@ public class BookDeatilActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                downloadManager= (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+                downloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
                 DownloadManager.Request request = new DownloadManager.Request(
                         Uri.parse(book.getPath()));
-                File fold=new File("Read/download");
-                if(fold.isDirectory()&&!fold.exists())
+                File fold = new File("Read/download");
+                if (fold.isDirectory() && !fold.exists())
                     fold.mkdirs();
                 request.setAllowedNetworkTypes(
                         DownloadManager.Request.NETWORK_MOBILE
                                 | DownloadManager.Request.NETWORK_WIFI)
                         .setAllowedOverRoaming(false) // 缺省是true
                         .setTitle("下载") // 用于信息查看
-                        .setDescription("下载"+book.getBookName()) // 用于信息查看
+                        .setDescription("下载" + book.getBookName()) // 用于信息查看
                         .setDestinationInExternalPublicDir(
-                                "Read/download/"+ bookId,
-                                StringUtil.getBookInfo(book.getPath(),book.getBookName()));
+                                "Read/download/" + bookId,
+                                StringUtil.getBookInfo(book.getPath(), book.getBookName()));
                 final long mDownloadId = downloadManager.enqueue(request); // 加入下载队列
 
                 startQuery(mDownloadId);
@@ -125,12 +134,12 @@ public class BookDeatilActivity extends AppCompatActivity {
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()){
+                switch (item.getItemId()) {
                     case R.id.action_collect:
-                        if(ifCollect==1){
-                         break;
+                        if (ifCollect == 1) {
+                            break;
                         }
-                        collect(item,bookId);
+                        collect(item, bookId);
                         break;
                 }
                 return true;
@@ -160,21 +169,24 @@ public class BookDeatilActivity extends AppCompatActivity {
     }
 
     private void refreshData(String bookId) {
-        String userId="";
-        if(readApplication.isLogin()){
-            userId=readApplication.getLoginUser().getUserId();
+        String userId = "";
+        if (readApplication.isLogin()) {
+            userId = readApplication.getLoginUser().getUserId();
         }
-        RestClient.bookApi().book(bookId,userId).enqueue(new Callback<Book>() {
+        RestClient.bookApi().book(bookId, userId).enqueue(new Callback<Book>() {
             @Override
             public void onResponse(Call<Book> call, Response<Book> response) {
-                if(response.code()==ResultCode.SUCCESS){
+                if (response.code() == ResultCode.SUCCESS) {
                     book = response.body();
                     Picasso.with(getBaseContext()).load(book.getCover()).into(bookDetailImg);
                     bookTitle.setText(book.getBookName());
-                    ifCollect=book.getIfCollect();
-                    if(ifCollect==1){
-//                        MenuView.ItemView itemView= (MenuView.ItemView) findViewById(R.id.action_collect);
-//                        itemView.setIcon(getResources().getDrawable(R.drawable.general__shared__favour_selected));
+                    bookAuthor.setText(book.getAuthor());
+                    bookSize.setText(ToolUtils.FormetFileSize(book.getSize()));
+                    bookIntroduction.setText(book.getIntroduction());
+                    ifCollect = book.getIfCollect();
+                    if (ifCollect == 1) {
+                        //                        MenuView.ItemView itemView= (MenuView.ItemView) findViewById(R.id.action_collect);
+                        //                        itemView.setIcon(getResources().getDrawable(R.drawable.general__shared__favour_selected));
                     }
                 }
                 if (response.code() == ResultCode.NODETAIL) {
@@ -188,11 +200,12 @@ public class BookDeatilActivity extends AppCompatActivity {
             }
         });
     }
-    private void collect(final MenuItem menuItem, final String bookId){
-        if(readApplication.isLogin()){
-            String userId=readApplication.getLoginUser().getUserId();
-            if(userId!=null){
-                RestClient.userApi().collect(userId,bookId).enqueue(new Callback<ResponseBody>() {
+
+    private void collect(final MenuItem menuItem, final String bookId) {
+        if (readApplication.isLogin()) {
+            String userId = readApplication.getLoginUser().getUserId();
+            if (userId != null) {
+                RestClient.userApi().collect(userId, bookId).enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         if (response.code() == ResultCode.SUCCESS) {
@@ -209,16 +222,17 @@ public class BookDeatilActivity extends AppCompatActivity {
                         Snackbar.make(getWindow().getDecorView(), "网络连接失败", Snackbar.LENGTH_SHORT).setAction("action", null).show();
                     }
                 });
-            }else{
-                startActivity(new Intent(getBaseContext(),LoginActivity.class));
+            } else {
+                startActivity(new Intent(getBaseContext(), LoginActivity.class));
             }
-        }else{
-            startActivity(new Intent(getBaseContext(),LoginActivity.class));
+        } else {
+            startActivity(new Intent(getBaseContext(), LoginActivity.class));
         }
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_book_deatil,menu);
+        getMenuInflater().inflate(R.menu.menu_book_deatil, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -233,13 +247,16 @@ public class BookDeatilActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
     private void startQuery(long downloadId) {
         if (downloadId != 0) {
             runnable.DownID = downloadId;
             handler.postDelayed(runnable, step);
         }
 
-    };
+    }
+
+    ;
 
     private void stopQuery() {
         handler.removeCallbacks(runnable);
@@ -253,7 +270,7 @@ public class BookDeatilActivity extends AppCompatActivity {
             Toast.makeText(this, "Download not found!", Toast.LENGTH_LONG)
                     .show();
         } else { // 以下是从游标中进行信息提取
-            if(!c.moveToFirst()){
+            if (!c.moveToFirst()) {
                 c.close();
                 return;
             }
