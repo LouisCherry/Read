@@ -6,9 +6,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.facebook.drawee.view.SimpleDraweeView;
 import com.read.pan.R;
 import com.read.pan.entity.Book;
 
@@ -46,7 +46,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
         String imguri=mData.get(position).getCover();
         Uri uri=Uri.parse(imguri);
-        viewHolder.storeTopImg.setImageURI(uri);
+//        viewHolder.storeTopImg.setImageURI(uri);
         viewHolder.storeTopTitle.setText(mData.get(position).getBookName());
         //将数据保存在itemView的Tag中，以便点击时进行获取
         viewHolder.itemView.setTag(mData.get(position));
@@ -87,7 +87,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     //自定义的ViewHolder，持有每个Item的的所有界面元素
     public static class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.store_top_img)
-        SimpleDraweeView storeTopImg;
+        ImageView storeTopImg;
+//        SimpleDraweeView storeTopImg;
         @BindView(R.id.store_top_title)
         TextView storeTopTitle;
         public ViewHolder(View view) {

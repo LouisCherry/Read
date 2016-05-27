@@ -11,9 +11,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.facebook.drawee.view.SimpleDraweeView;
 import com.read.pan.R;
 import com.read.pan.app.ReadApplication;
 import com.read.pan.config.PropertyConfig;
@@ -39,7 +39,8 @@ public class BookDeatilActivity extends AppCompatActivity {
     @BindView(R.id.fab)
     FloatingActionButton fab;
     @BindView(R.id.book_detail_img)
-    SimpleDraweeView bookDetailImg;
+    ImageView bookDetailImg;
+//    SimpleDraweeView bookDetailImg;
     @BindView(R.id.book_title)
     TextView bookTitle;
     private String bookId;

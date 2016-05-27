@@ -6,9 +6,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.facebook.drawee.view.SimpleDraweeView;
 import com.read.pan.R;
 import com.read.pan.entity.Book;
 
@@ -87,7 +87,8 @@ public class BookStoreAdapter extends RecyclerView.Adapter<BookStoreAdapter.View
     //自定义的ViewHolder，持有每个Item的的所有界面元素
     public static class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.store_top_img)
-        SimpleDraweeView storeTopImg;
+        ImageView storeTopImg;
+//        SimpleDraweeView storeTopImg;
         @BindView(R.id.store_top_title)
         TextView storeTopTitle;
         public ViewHolder(View view) {

@@ -1,6 +1,5 @@
 package com.read.pan.app;
 
-import com.facebook.drawee.backends.pipeline.Fresco;
 import com.read.pan.entity.User;
 import com.read.pan.util.CyptoUtils;
 
@@ -21,7 +20,7 @@ public class ReadApplication extends ZLAndroidApplication{
     @Override
     public void onCreate() {
         super.onCreate();
-        Fresco.initialize(getApplicationContext());
+//        Fresco.initialize(getApplicationContext());
         initLogin();
     }
     private void initLogin() {

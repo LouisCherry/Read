@@ -15,9 +15,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 
-import com.afollestad.materialdialogs.MaterialDialog;
-import com.facebook.drawee.view.SimpleDraweeView;
 import com.read.pan.MainActivity;
 import com.read.pan.R;
 import com.read.pan.app.ReadApplication;
@@ -37,7 +36,8 @@ import retrofit2.Response;
 
 public class UserInfoActivity extends AppCompatActivity {
     @BindView(R.id.userInfo_img)
-    SimpleDraweeView userInfoImg;
+    ImageView userInfoImg;
+//    SimpleDraweeView userInfoImg;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.btn_logout)
@@ -99,25 +99,25 @@ public class UserInfoActivity extends AppCompatActivity {
         userInfoImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new MaterialDialog.Builder(UserInfoActivity.this)
-                        .items(R.array.chose_avatar)
-                        .itemsCallback(new MaterialDialog.ListCallback(){
-
-                            @Override
-                            public void onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
-                                switch (which){
-                                    case 0:
-                                        startCaemra();
-                                        dialog.dismiss();
-                                        break;
-                                    case 1:
-                                        startGralley();
-                                        dialog.dismiss();
-                                        break;
-                                }
-                            }
-                        })
-                        .show();
+//                new MaterialDialog.Builder(UserInfoActivity.this)
+//                        .items(R.array.chose_avatar)
+//                        .itemsCallback(new MaterialDialog.ListCallback(){
+//
+//                            @Override
+//                            public void onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
+//                                switch (which){
+//                                    case 0:
+//                                        startCaemra();
+//                                        dialog.dismiss();
+//                                        break;
+//                                    case 1:
+//                                        startGralley();
+//                                        dialog.dismiss();
+//                                        break;
+//                                }
+//                            }
+//                        })
+//                        .show();
             }
         });
     }

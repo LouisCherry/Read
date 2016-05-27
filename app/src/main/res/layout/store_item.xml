@@ -17,12 +17,16 @@
         android:layout_height="match_parent"
         android:orientation="horizontal"
         android:padding="5dp">
-        <com.facebook.drawee.view.SimpleDraweeView
+<!--        <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/store_top_img"
             android:layout_width="60dp"
             android:layout_height="90dp"
             fresco:placeholderImage="@drawable/file_icon_default"
-            android:layout_gravity="center_vertical|left" />
+            android:layout_gravity="center_vertical|left" />-->
+        <ImageView
+            android:id="@+id/store_top_img"
+            android:layout_width="60dp"
+            android:layout_height="90dp" />
         <TextView
             android:id="@+id/store_top_title"
             android:layout_width="0dp"
