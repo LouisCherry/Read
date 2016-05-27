@@ -1,7 +1,12 @@
 package com.read.pan.activity;
 
+import android.app.DownloadManager;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -12,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.read.pan.R;
 import com.read.pan.app.ReadApplication;
@@ -19,7 +25,10 @@ import com.read.pan.config.PropertyConfig;
 import com.read.pan.entity.Book;
 import com.read.pan.network.RestClient;
 import com.read.pan.network.ResultCode;
+import com.read.pan.util.StringUtil;
 import com.squareup.picasso.Picasso;
+
+import java.io.File;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -46,6 +55,28 @@ public class BookDeatilActivity extends AppCompatActivity {
     private String bookId;
     ReadApplication readApplication;
     private int ifCollect=0;
+    private Book book;
+    private DownloadManager downloadManager;
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            // TODO Auto-generated method stub
+            super.handleMessage(msg);
+        }
+
+    };
+    int step = 1000;
+    QueryRunnable runnable = new QueryRunnable();
+
+    class QueryRunnable implements Runnable {
+        public long DownID;
+
+        @Override
+        public void run() {
+            queryState(DownID);
+            handler.postDelayed(runnable, step);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,8 +93,31 @@ public class BookDeatilActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                downloadManager= (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+                DownloadManager.Request request = new DownloadManager.Request(
+                        Uri.parse(book.getPath()));
+                File fold=new File("Read/download");
+                if(fold.isDirectory()&&!fold.exists())
+                    fold.mkdirs();
+                request.setAllowedNetworkTypes(
+                        DownloadManager.Request.NETWORK_MOBILE
+                                | DownloadManager.Request.NETWORK_WIFI)
+                        .setAllowedOverRoaming(false) // 缺省是true
+                        .setTitle("下载") // 用于信息查看
+                        .setDescription("下载"+book.getBookName()) // 用于信息查看
+                        .setDestinationInExternalPublicDir(
+                                "Read/download/"+ bookId,
+                                StringUtil.getBookInfo(book.getPath(),book.getBookName()));
+                final long mDownloadId = downloadManager.enqueue(request); // 加入下载队列
+
+                startQuery(mDownloadId);
+                Snackbar.make(view, "开始下载", Snackbar.LENGTH_LONG)
+                        .setAction("取消下载", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                downloadManager.remove(mDownloadId);
+                            }
+                        }).show();
             }
         });
         this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -114,9 +168,7 @@ public class BookDeatilActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Book> call, Response<Book> response) {
                 if(response.code()==ResultCode.SUCCESS){
-                    Book book = response.body();
-//                    Uri uri = Uri.parse(book.getCover());
-//                    bookDetailImg.setImageURI(uri);
+                    book = response.body();
                     Picasso.with(getBaseContext()).load(book.getCover()).into(bookDetailImg);
                     bookTitle.setText(book.getBookName());
                     ifCollect=book.getIfCollect();
@@ -181,4 +233,49 @@ public class BookDeatilActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+    private void startQuery(long downloadId) {
+        if (downloadId != 0) {
+            runnable.DownID = downloadId;
+            handler.postDelayed(runnable, step);
+        }
+
+    };
+
+    private void stopQuery() {
+        handler.removeCallbacks(runnable);
+    }
+
+    private void queryState(long downID) {
+        // 关键：通过ID向下载管理查询下载情况，返回一个cursor
+        Cursor c = downloadManager.query(new DownloadManager.Query()
+                .setFilterById(downID));
+        if (c == null) {
+            Toast.makeText(this, "Download not found!", Toast.LENGTH_LONG)
+                    .show();
+        } else { // 以下是从游标中进行信息提取
+            if(!c.moveToFirst()){
+                c.close();
+                return;
+            }
+            c.close();
+        }
+    }
+
+    private String statusMessage(int st) {
+        switch (st) {
+            case DownloadManager.STATUS_FAILED:
+                return "Download failed";
+            case DownloadManager.STATUS_PAUSED:
+                return "Download paused";
+            case DownloadManager.STATUS_PENDING:
+                return "Download pending";
+            case DownloadManager.STATUS_RUNNING:
+                return "Download in progress!";
+            case DownloadManager.STATUS_SUCCESSFUL:
+                return "Download finished";
+            default:
+                return "Unknown Information";
+        }
+    }
+
 }

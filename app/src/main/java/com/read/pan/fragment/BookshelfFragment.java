@@ -117,18 +117,6 @@ public class BookshelfFragment extends Fragment {
 
     @Override
     public void onStart() {
-        myFBReaderApp = (FBReaderApp) FBReaderApp.Instance();
-        if (myFBReaderApp == null) {
-            myFBReaderApp = new FBReaderApp(getActivity(),
-                    new BookCollectionShadow());
-        }
-        getCollection().bindToService(getActivity(), null);
-        new sdScanAysnTask(3).execute();
-        super.onStart();
-    }
-
-    @Override
-    public void onResume() {
 //        myFBReaderApp = (FBReaderApp) FBReaderApp.Instance();
 //        if (myFBReaderApp == null) {
 //            myFBReaderApp = new FBReaderApp(getActivity(),
@@ -136,12 +124,24 @@ public class BookshelfFragment extends Fragment {
 //        }
 //        getCollection().bindToService(getActivity(), null);
 //        new sdScanAysnTask(3).execute();
+        super.onStart();
+    }
+
+    @Override
+    public void onResume() {
+        myFBReaderApp = (FBReaderApp) FBReaderApp.Instance();
+        if (myFBReaderApp == null) {
+            myFBReaderApp = new FBReaderApp(getActivity(),
+                    new BookCollectionShadow());
+        }
+        getCollection().bindToService(getActivity(), null);
+        new sdScanAysnTask(3).execute();
         super.onResume();
     }
 
     @Override
     public void onPause() {
-//        getCollection().unbind();
+        getCollection().unbind();
         super.onPause();
     }
 
