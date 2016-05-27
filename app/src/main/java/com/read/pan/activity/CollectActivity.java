@@ -79,9 +79,9 @@ public class CollectActivity extends AppCompatActivity {
         readApplication= (ReadApplication) getApplication();
         books=new ArrayList<>();
         offset = 0;
+        toolbar.setTitle("我的收藏");
         setSupportActionBar(toolbar);
         this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        this.getSupportActionBar().setDisplayShowTitleEnabled(false);
         //给Recycler设置gridView布局
         gridLayoutManager = new GridLayoutManager(getBaseContext(), 1);
         searchRecycler.setLayoutManager(gridLayoutManager);
