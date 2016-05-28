@@ -9,18 +9,16 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.read.pan.R;
-import com.read.pan.adapter.BookshelfAdapter;
 import com.read.pan.util.ReadUtils;
 import com.yamin.reader.activity.CoreReadActivity;
 import com.yamin.reader.adapter.ScanFileAdapter;
@@ -59,7 +57,6 @@ public class BookshelfFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
     //    @BindView(R.id.shelf_recycler)
     //    RecyclerView shelfRecycler;
-    GridLayoutManager gridLayoutManager;
     @BindView(R.id.carddemo_grid_base1)
     CardGridView carddemoGridBase1;
     // TODO: Rename and change types of parameters
@@ -70,13 +67,11 @@ public class BookshelfFragment extends Fragment {
     private final int BOOK_SHELF = 0;
     private final int BOOK_FAVORITE = 2;
     private final int BOOK_INIT = 3;
-    private BookshelfAdapter bookshelfAdapter;
     private ContentResolver resolver;
     private ArrayList<ScanFileAdapter.FileInfo> mFileLists;
     private FBReaderApp myFBReaderApp;
     private CardGridArrayAdapter mCardArrayAdapter;
     private ArrayList<Card> cards = new ArrayList<Card>();
-
     public BookshelfFragment() {
         // Required empty public constructor
     }
@@ -118,6 +113,13 @@ public class BookshelfFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
         resolver = getContext().getContentResolver();
+        myFBReaderApp = (FBReaderApp) FBReaderApp.Instance();
+        if (myFBReaderApp == null) {
+            myFBReaderApp = new FBReaderApp(getActivity(),
+                    new BookCollectionShadow());
+        }
+        getCollection().bindToService(getActivity(), null);
+        new sdScanAysnTask(3).execute();
     }
 
     @Override
@@ -126,32 +128,17 @@ public class BookshelfFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_bookshelf, container, false);
         ButterKnife.bind(this, view);
-        //        init();
         initCards();
         return view;
     }
 
     @Override
     public void onStart() {
-        //        myFBReaderApp = (FBReaderApp) FBReaderApp.Instance();
-        //        if (myFBReaderApp == null) {
-        //            myFBReaderApp = new FBReaderApp(getActivity(),
-        //                    new BookCollectionShadow());
-        //        }
-        //        getCollection().bindToService(getActivity(), null);
-        //        new sdScanAysnTask(3).execute();
         super.onStart();
     }
 
     @Override
     public void onResume() {
-        myFBReaderApp = (FBReaderApp) FBReaderApp.Instance();
-        if (myFBReaderApp == null) {
-            myFBReaderApp = new FBReaderApp(getActivity(),
-                    new BookCollectionShadow());
-        }
-        getCollection().bindToService(getActivity(), null);
-        new sdScanAysnTask(3).execute();
         super.onResume();
     }
 
@@ -200,43 +187,6 @@ public class BookshelfFragment extends Fragment {
     private void initCards() {
         mCardArrayAdapter = new CardGridArrayAdapter(getActivity(), cards);
         carddemoGridBase1.setAdapter(mCardArrayAdapter);
-        new sdScanAysnTask(3).execute();
-    }
-
-    //初始化操作
-    private void init() {
-        //给Recycler设置gridView布局
-        gridLayoutManager = new GridLayoutManager(getContext(), 3);
-        //        shelfRecycler.setLayoutManager(gridLayoutManager);
-        //        //如果可以确定每个item的高度是固定的，设置这个选项可以提高性能
-        //        shelfRecycler.setHasFixedSize(true);
-        bookshelfAdapter = new BookshelfAdapter(getContext(), shelfData);
-        //        shelfRecycler.setAdapter(bookshelfAdapter);
-        bookshelfAdapter.setOnItemClickLitener(new BookshelfAdapter.OnItemClickLitener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                Book b = shelfData.get(position);
-                // File Exist
-                if (ReadUtils.fileIsExists(b.getBookPath())) {
-                    ZLFile file = ZLFile.createFileByPath(b.getBookPath());
-                    org.geometerplus.fbreader.book.Book book = createBookForFile(file);
-                    if (book != null) {
-                        CoreReadActivity.openBookActivity(getActivity(), book,
-                                null);
-                        getActivity().overridePendingTransition(
-                                R.anim.activity_enter, R.anim.activity_exit);
-                    }
-                }
-            }
-
-            @Override
-            public void onItemLongClick(View view, int position) {
-
-            }
-        });
-        //设置Item增加、移除动画
-        //        shelfRecycler.setItemAnimator(new DefaultItemAnimator());
-        new sdScanAysnTask(3).execute();
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -307,7 +257,7 @@ public class BookshelfFragment extends Fragment {
             }
             // 2
             if (forWhat == 2) {
-                //                delLocalShelf();
+                loadShelfData();
             }
             if (forWhat == 3) {
                 loadShelfData();
@@ -337,12 +287,13 @@ public class BookshelfFragment extends Fragment {
             // 2
             if (forWhat == 2) {
                 //                stopLoading();
-                //                shelfData = DbDataOperation.getBookInfo(resolver);
+                shelfData = DbDataOperation.getBookInfo(resolver);
                 //                mABdapter.setmData(shelfData);
                 //                if(mABdapter.isEditMode()){
                 //                    mABdapter.setEditMode(false);
                 //                }
-                //                mABdapter.notifyDataSetChanged();
+                carddemoGridBase1.setAdapter(mCardArrayAdapter);
+                mCardArrayAdapter.notifyDataSetChanged();
                 //                //
                 //                updateView();
                 //                if (mPopuwindow != null && mPopuwindow.isShowing()) {
@@ -394,17 +345,10 @@ public class BookshelfFragment extends Fragment {
 
     private void loadShelfData() {
         shelfData = DbDataOperation.getBookInfo(resolver);
+        cards.clear();
         for (int i = 0; i < shelfData.size(); i++) {
             ShelfCard card = new ShelfCard(getActivity());
-            CardHeader header = new CardHeader(getActivity());
-            header.setTitle("Card");
-            header.setPopupMenu(R.menu.shelf_book, new CardHeader.OnClickCardHeaderPopupMenuListener() {
-                @Override
-                public void onMenuItemClick(BaseCard card, MenuItem item) {
-                    Toast.makeText(getActivity(), "Click on " + item.getTitle(), Toast.LENGTH_SHORT).show();
-                }
-            });
-            card.addCardHeader(header);
+            card.index=i;
             card.headerTitle = shelfData.get(i).getBookName();
             card.secondaryTitle = shelfData.get(i).getBookSize();
             if (TextUtils.isEmpty(shelfData.get(i).getBookProgress())) {
@@ -434,6 +378,35 @@ public class BookshelfFragment extends Fragment {
                 card.resourceIdThumbnail=R.drawable.listview_othercover;
             }
             card.init();
+            final int a=i;
+            card.setOnClickListener(new Card.OnCardClickListener() {
+                @Override
+                public void onClick(Card card, View view) {
+                    Book b = shelfData.get(a);
+                    // File Exist
+                    if (ReadUtils.fileIsExists(b.getBookPath())) {
+                        ZLFile file = ZLFile.createFileByPath(b.getBookPath());
+                        org.geometerplus.fbreader.book.Book book = createBookForFile(file);
+                        if (book != null) {
+                            CoreReadActivity.openBookActivity(getActivity(), book,
+                                    null);
+                            getActivity().overridePendingTransition(
+                                    R.anim.activity_enter, R.anim.activity_exit);
+                        }
+                    }else{
+                        DbDataOperation.deleteBook(resolver,b.getBookId());
+                        Snackbar.make(getActivity().getWindow().getDecorView(),"书籍失效",Snackbar.LENGTH_SHORT).show();
+                        ZLFile file = ZLFile.createFileByPath(shelfData.get(a)
+                                .getBookPath());
+                        org.geometerplus.fbreader.book.Book book = createBookForFile(file);
+                        if (book != null) {
+                            myFBReaderApp.Collection.removeBook(book, false);
+                        }
+                        shelfData.remove(a);
+                        new sdScanAysnTask(2).execute();
+                    }
+                }
+            });
             cards.add(card);
         }
     }
@@ -489,7 +462,7 @@ public class BookshelfFragment extends Fragment {
         protected String thirdTitle;
         TextView cardShelfRemark;
         TextView cardShelfSize;
-
+        protected int index;
         public ShelfCard(Context context) {
             super(context, R.layout.card_shelf);
         }
@@ -505,12 +478,20 @@ public class BookshelfFragment extends Fragment {
             header.setPopupMenu(R.menu.shelf_book, new CardHeader.OnClickCardHeaderPopupMenuListener() {
                 @Override
                 public void onMenuItemClick(BaseCard card, MenuItem item) {
-
+                    Book b = shelfData.get(index);
+                    DbDataOperation.deleteBook(resolver,b.getBookId());
+                    Snackbar.make(getActivity().getWindow().getDecorView(),"删除成功",Snackbar.LENGTH_SHORT).show();
+                    ZLFile file = ZLFile.createFileByPath(shelfData.get(index)
+                            .getBookPath());
+                    org.geometerplus.fbreader.book.Book book = createBookForFile(file);
+                    if (book != null) {
+                        myFBReaderApp.Collection.removeBook(book, false);
+                    }
+                    shelfData.remove(index);
+                    new sdScanAysnTask(2).execute();
                 }
             });
-
             addCardHeader(header);
-
             GplayGridThumb thumbnail = new GplayGridThumb(getContext());
             if (resourceIdThumbnail > -1)
                 thumbnail.setDrawableResource(resourceIdThumbnail);
@@ -543,8 +524,8 @@ public class BookshelfFragment extends Fragment {
 
             @Override
             public void setupInnerViewElements(ViewGroup parent, View viewImage) {
-                //viewImage.getLayoutParams().width = 196;
-                //viewImage.getLayoutParams().height = 196;
+//                viewImage.getLayoutParams().width = 196;
+//                viewImage.getLayoutParams().height = 196;
 
             }
         }

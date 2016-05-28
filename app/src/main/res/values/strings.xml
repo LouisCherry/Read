@@ -46,7 +46,7 @@
     <string name="book_details">详细信息:</string>
     <string name="book_favorite">我的收藏</string>
     <string name="share_book">分享</string>
-    <string name="del_book">删除</string>
+    <string name="del_book">delete</string>
     <string name="eit_book">编辑</string>
     <string name="email">Email</string>
     <string name="userName">UserName</string>

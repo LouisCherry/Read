@@ -257,10 +257,10 @@
     <!--Style for Content View-->
     <style name="card.native.content_gplay_outer_layout" >
         <item name="android:layout_width">match_parent</item>
-        <item name="android:minHeight">@dimen/card_base_empty_height</item>
+        <item name="android:minHeight">50dp</item>
         <item name="android:paddingLeft">8dp</item>
         <item name="android:paddingRight">4dp</item>
         <item name="android:paddingTop">2dp</item>
-        <item name="android:paddingBottom">@dimen/card_main_content_native_default_paddingBottom</item>
+        <item name="android:paddingBottom">2dp</item>
     </style>
 </resources>
