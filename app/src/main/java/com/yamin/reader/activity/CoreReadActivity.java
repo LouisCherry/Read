@@ -786,13 +786,15 @@ public class CoreReadActivity extends Activity {
 
 	//
 	public void backPress() {
-		int y = myFBReaderApp.getTextView().pagePosition().Current;
-		int z = myFBReaderApp.getTextView().pagePosition().Total;
-		DbDataOperation.updateValuesToTable(resolver,
-				"" + ToolUtils.myPercent(y, z),
-				myFBReaderApp.Model.Book.File.getShortName());
-		myFBReaderApp.Collection.storePosition(myBook.getId(), myFBReaderApp
-				.getTextView().getEndCursor());
+		if(myFBReaderApp.Model!=null){
+			int y = myFBReaderApp.getTextView().pagePosition().Current;
+			int z = myFBReaderApp.getTextView().pagePosition().Total;
+			DbDataOperation.updateValuesToTable(resolver,
+					"" + ToolUtils.myPercent(y, z),
+					myFBReaderApp.Model.Book.File.getShortName());
+			myFBReaderApp.Collection.storePosition(myBook.getId(), myFBReaderApp
+					.getTextView().getEndCursor());
+		}
 		//
 		startActivity(new Intent(CoreReadActivity.this, com.read.pan.MainActivity.class));
 		CoreReadActivity.this.overridePendingTransition(R.anim.activity_enter,

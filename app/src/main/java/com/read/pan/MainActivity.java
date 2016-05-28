@@ -4,9 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
@@ -53,8 +51,6 @@ public class MainActivity extends AppCompatActivity
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.fab)
-    FloatingActionButton fab;
     @BindView(R.id.nav_view)
     NavigationView navView;
     @BindView(R.id.drawer_layout)
@@ -157,13 +153,6 @@ public class MainActivity extends AppCompatActivity
      * 注册控件监听事件
      */
     private void bindListener() {
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
         navView.setNavigationItemSelectedListener(this);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -250,7 +239,6 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
     public void openSearch() {
-        toolbar.setTitle("");
         searchbox.revealFromMenuItem(R.id.action_search, this);
 //        for (int x = 0; x < 10; x++) {
 //            SearchResult option = new SearchResult("Result "
@@ -312,17 +300,12 @@ public class MainActivity extends AppCompatActivity
         if (requestCode == SearchBox.VOICE_RECOGNITION_CODE && resultCode ==RESULT_OK) {
             ArrayList<String> matches = data
                     .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-            String resultString="";
-            for(int i=0;i<matches.size();i++){
-                resultString+=matches.get(i);
-            }
-            searchbox.populateEditText(resultString);
+            searchbox.populateEditText(matches.get(0));
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
 
     protected void closeSearch() {
         searchbox.hideCircularly(this);
-        if(searchbox.getSearchText().isEmpty())toolbar.setTitle("");
     }
 }

@@ -113,13 +113,6 @@ public class BookshelfFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
         resolver = getContext().getContentResolver();
-        myFBReaderApp = (FBReaderApp) FBReaderApp.Instance();
-        if (myFBReaderApp == null) {
-            myFBReaderApp = new FBReaderApp(getActivity(),
-                    new BookCollectionShadow());
-        }
-        getCollection().bindToService(getActivity(), null);
-        new sdScanAysnTask(3).execute();
     }
 
     @Override
@@ -128,17 +121,27 @@ public class BookshelfFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_bookshelf, container, false);
         ButterKnife.bind(this, view);
-        initCards();
         return view;
     }
 
     @Override
     public void onStart() {
+//        if (myFBReaderApp != null) {
+//            getCollection().unbind();
+//        }
+        initCards();
         super.onStart();
     }
 
     @Override
     public void onResume() {
+        myFBReaderApp = (FBReaderApp) FBReaderApp.Instance();
+        if (myFBReaderApp == null) {
+            myFBReaderApp = new FBReaderApp(getActivity(),
+                    new BookCollectionShadow());
+        }
+        getCollection().bindToService(getActivity(), null);
+        new sdScanAysnTask(3).execute();
         super.onResume();
     }
 
@@ -151,8 +154,8 @@ public class BookshelfFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        getCollection().unbind();
-        super.onDestroy();
+//        getCollection().unbind();
+//        super.onDestroy();
     }
 
     @Override
@@ -359,23 +362,14 @@ public class BookshelfFragment extends Fragment {
                 String third=shelfData.get(i).getBookProgress();
                 card.thirdTitle=third;
             }
-            if(returnSuffix(shelfData.get(i).getBookName()).contains(".txt")){
-                card.resourceIdThumbnail=R.drawable.listview_txtcover;
-            }
-            else if(returnSuffix(shelfData.get(i).getBookName()).contains(".epub")){
-                card.resourceIdThumbnail=R.drawable.listview_epubcover;
-            }
-            else if(returnSuffix(shelfData.get(i).getBookName()).contains(".html")){
-                card.resourceIdThumbnail=R.drawable.listview_htmlcover;
-            }
-            else if(returnSuffix(shelfData.get(i).getBookName()).contains(".oeb")){
-                card.resourceIdThumbnail=R.drawable.listview_oebicon;
-            }
-            else if(returnSuffix(shelfData.get(i).getBookName()).contains(".mobi")){
-                card.resourceIdThumbnail=R.drawable.listview_mobiicon;
-            }
-            else{
-                card.resourceIdThumbnail=R.drawable.listview_othercover;
+//            ZLFile file = ZLFile.createFileByPath(shelfData.get(i).getBookPath());
+//            org.geometerplus.fbreader.book.Book book = createBookForFile(file);
+//            String cover = BookUtil.getCover(book).getURI();
+            String cover=null;
+            if(cover!=null){
+
+            }else{
+                card.resourceIdThumbnail=R.drawable.empty_icon;
             }
             card.init();
             final int a=i;
@@ -463,6 +457,7 @@ public class BookshelfFragment extends Fragment {
         TextView cardShelfRemark;
         TextView cardShelfSize;
         protected int index;
+        protected String urlResource;
         public ShelfCard(Context context) {
             super(context, R.layout.card_shelf);
         }
@@ -496,7 +491,7 @@ public class BookshelfFragment extends Fragment {
             if (resourceIdThumbnail > -1)
                 thumbnail.setDrawableResource(resourceIdThumbnail);
             else
-                thumbnail.setDrawableResource(R.drawable.ab_bottom_solid_light_holo);
+                thumbnail.setDrawableResource(resourceIdThumbnail);
             addCardThumbnail(thumbnail);
 
             setOnClickListener(new OnCardClickListener() {
