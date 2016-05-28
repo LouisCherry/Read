@@ -45,7 +45,7 @@ dependencies {
     compile 'com.squareup.okio:okio:1.6.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.afollestad.material-dialogs:core:0.8.5.9'
-    compile 'com.quinny898.library.persistentsearch:library:1.1.0-SNAPSHOT'
+    compile 'com.lapism:searchview:3.0.2'
     //Core
     compile 'com.github.gabrielemariotti.cards:cardslib-core:2.1.0'
     //Optional for built-in cards

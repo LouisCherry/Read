@@ -250,7 +250,7 @@ public class StoreFragment extends Fragment{
 
             @Override
             public void onFailure(Call<List<Book>> call, Throwable t) {
-                if(rootView!=null){
+                if(rootView.getParent() instanceof View){
                     Snackbar.make(rootView, "网络连接失败", Snackbar.LENGTH_SHORT).setAction("action", null).show();
                     refresher.setRefreshing(false);
                 }

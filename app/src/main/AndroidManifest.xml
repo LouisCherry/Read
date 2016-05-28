@@ -25,13 +25,14 @@
     <uses-permission-sdk-23 android:name="android.permission.GET_ACCOUNTS"/>
     <uses-permission-sdk-23 android:name="android.permission.READ_PROFILE"/>
     <uses-permission-sdk-23 android:name="android.permission.READ_CONTACTS"/>
-
+    <user-permission android:name="android.permission.ACCESS_DOWNLOAD_MANAGER"/>
     <application
         android:name=".app.ReadApplication"
         android:hardwareAccelerated="true"
         android:icon="@drawable/icon"
         android:theme="@style/AppTheme">
-        <permission android:name="android.permission.ACCESS_DOWNLOAD_MANAGER" />
+
+        <permission android:name="android.permission.RECORD_AUDIO" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

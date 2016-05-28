@@ -1,12 +1,15 @@
 package com.read.pan;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.speech.RecognizerIntent;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -18,10 +21,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.quinny898.library.persistentsearch.SearchBox;
-import com.quinny898.library.persistentsearch.SearchResult;
+import com.lapism.searchview.SearchAdapter;
+import com.lapism.searchview.SearchHistoryTable;
+import com.lapism.searchview.SearchItem;
+import com.lapism.searchview.SearchView;
 import com.read.pan.activity.CollectActivity;
 import com.read.pan.activity.LoginActivity;
 import com.read.pan.activity.SearchResultActivity;
@@ -40,9 +44,6 @@ import java.util.List;
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-//import com.quinny898.library.persistentsearch.SearchBox;
-//import com.quinny898.library.persistentsearch.SearchResult;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -63,14 +64,14 @@ public class MainActivity extends AppCompatActivity
     TabLayout tabLayout;
     @BindView(R.id.view_pager)
     ViewPager viewPager;
-//    SimpleDraweeView avatar;
     ImageView avatar;
     TextView navUsername;
     List<String> tablayoutTitle;
     List<Fragment> viewPagerFragments;
     ReadApplication application;
-    @BindView(R.id.searchbox)
-    com.quinny898.library.persistentsearch.SearchBox searchbox;
+    @BindView(R.id.searchView)
+    SearchView mSearchView;
+    private SearchHistoryTable mHistoryDatabase;
     @Override
     public void onFragmentInteraction(Uri uri) {
     }
@@ -113,17 +114,22 @@ public class MainActivity extends AppCompatActivity
         //千万别忘了，关联TabLayout与ViewPager
         //同时也要覆写PagerAdapter的getPageTitle方法，否则Tab没有title
         tabLayout.setupWithViewPager(viewPager);
-        searchbox.enableVoiceRecognition(this);
-        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+        setSearchView();
+        mSearchView.setOnMenuClickListener(new SearchView.OnMenuClickListener() {
             @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                getSupportActionBar().hide();
-                openSearch();
-                return true;
+            public void onMenuClick() {
+                drawer.openDrawer(GravityCompat.START); // finish();
+                perm(Manifest.permission.RECORD_AUDIO, 0);
             }
         });
     }
-
+    private void perm(String permission, int permission_request) {
+        if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
+            if (!ActivityCompat.shouldShowRequestPermissionRationale(this, permission)) {
+                ActivityCompat.requestPermissions(this, new String[]{permission}, permission_request);
+            }
+        }
+    }
     @Override
     protected void onStart() {
         super.onStart();
@@ -137,8 +143,6 @@ public class MainActivity extends AppCompatActivity
                 navUsername.setText(user.getUserName());
             }
             if(user.getAvatar()!=null){
-//                Uri uri=Uri.parse(user.getAvatar());
-//                avatar.setImageURI(uri);
                 Picasso.with(getBaseContext()).load(user.getAvatar()).into(avatar);
             }
         }
@@ -185,7 +189,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main_activity, menu);
+//        getMenuInflater().inflate(R.menu.main_activity, menu);
         return true;
     }
 
@@ -238,74 +242,72 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-    public void openSearch() {
-        searchbox.revealFromMenuItem(R.id.action_search, this);
-//        for (int x = 0; x < 10; x++) {
-//            SearchResult option = new SearchResult("Result "
-//                    + Integer.toString(x), getResources().getDrawable(
-//                    R.drawable.ic_history));
-//            searchbox.addSearchable(option);
-//        }
-        searchbox.setMenuListener(new SearchBox.MenuListener() {
+protected void setSearchView() {
+    mHistoryDatabase = new SearchHistoryTable(this);
 
+    mSearchView = (SearchView) findViewById(R.id.searchView);
+    if (mSearchView != null) {
+        mSearchView.setVersion(SearchView.VERSION_TOOLBAR);
+        mSearchView.setVersionMargins(SearchView.VERSION_MARGINS_TOOLBAR_BIG);
+        mSearchView.setHint("Search");
+        mSearchView.setTextSize(16);
+        mSearchView.setHint("Search");
+        mSearchView.setDivider(false);
+        mSearchView.setVoice(true);
+//        mSearchView.setVoiceText("Set permission on Android 6+ !");
+        mSearchView.setAnimationDuration(SearchView.ANIMATION_DURATION);
+        mSearchView.setShadowColor(ContextCompat.getColor(this, R.color.search_shadow_layout));
+        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public void onMenuClick() {
-                // Hamburger has been clicked
-                Toast.makeText(MainActivity.this, "Menu click",
-                        Toast.LENGTH_LONG).show();
+            public boolean onQueryTextSubmit(String query) {
+                mSearchView.close(false);
+                getData(query, 0);
+                return true;
             }
 
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
         });
-        searchbox.setSearchListener(new SearchBox.SearchListener() {
-
+        mSearchView.setOnOpenCloseListener(new SearchView.OnOpenCloseListener() {
             @Override
-            public void onSearchOpened() {
-                // Use this to tint the screen
+            public void onOpen() {
 
             }
 
             @Override
-            public void onSearchClosed() {
-                // Use this to un-tint the screen
-                closeSearch();
-                getSupportActionBar().show();
-            }
-
-            @Override
-            public void onSearchTermChanged(String s) {
+            public void onClose() {
 
             }
-
-            @Override
-            public void onSearch(String searchTerm) {
-                startActivity(
-                        new Intent(getBaseContext(), SearchResultActivity.class)
-                                .putExtra("bookName",searchTerm));
-            }
-
-            @Override
-            public void onResultClick(SearchResult searchResult) {
-
-            }
-
-            @Override
-            public void onSearchCleared() {
-
-            }
-
         });
+
+        List<SearchItem> suggestionsList = new ArrayList<>();
+        suggestionsList.add(new SearchItem("search1"));
+        suggestionsList.add(new SearchItem("search2"));
+        suggestionsList.add(new SearchItem("search3"));
+
+        SearchAdapter searchAdapter = new SearchAdapter(this, suggestionsList);
+        searchAdapter.setOnItemClickListener(new SearchAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                mSearchView.close(false);
+                TextView textView = (TextView) view.findViewById(R.id.textView_item_text);
+                String query = textView.getText().toString();
+                getData(query, position);
+            }
+        });
+
+        mSearchView.setAdapter(searchAdapter);
     }
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == SearchBox.VOICE_RECOGNITION_CODE && resultCode ==RESULT_OK) {
-            ArrayList<String> matches = data
-                    .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-            searchbox.populateEditText(matches.get(0));
-        }
-        super.onActivityResult(requestCode, resultCode, data);
+}   private void getData(String text, int position) {
+        mHistoryDatabase.addItem(new SearchItem(text));
+        Intent intent = new Intent(getApplicationContext(), SearchResultActivity.class);
+        intent.putExtra("version", SearchView.VERSION_TOOLBAR);
+        intent.putExtra("version_margins", SearchView.VERSION_MARGINS_TOOLBAR_SMALL);
+        intent.putExtra("theme", SearchView.THEME_LIGHT);
+        intent.putExtra("bookName", text);
+        startActivity(intent);
     }
 
-    protected void closeSearch() {
-        searchbox.hideCircularly(this);
-    }
 }
