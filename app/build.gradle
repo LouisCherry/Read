@@ -46,5 +46,16 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.afollestad.material-dialogs:core:0.8.5.9'
     compile 'com.quinny898.library.persistentsearch:library:1.1.0-SNAPSHOT'
-//    compile project(path: ':search')
+    //Core
+    compile 'com.github.gabrielemariotti.cards:cardslib-core:2.1.0'
+    //Optional for built-in cards
+    compile 'com.github.gabrielemariotti.cards:cardslib-cards:2.1.0'
+    //Optional for RecyclerView
+    compile 'com.github.gabrielemariotti.cards:cardslib-recyclerview:2.1.0'
+    //Optional for staggered grid view
+    compile 'com.github.gabrielemariotti.cards:cardslib-extra-staggeredgrid:2.1.0'
+    //Optional for drag and drop
+    compile 'com.github.gabrielemariotti.cards:cardslib-extra-dragdrop:2.1.0'
+    //Optional for twoway  (coming soon)
+    //compile 'com.github.gabrielemariotti.cards:cardslib-extra-twoway:2.1.0'
 }
