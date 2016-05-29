@@ -34,6 +34,7 @@ import com.read.pan.adapter.FragmentAdapter;
 import com.read.pan.app.ReadApplication;
 import com.read.pan.entity.User;
 import com.read.pan.fragment.BookshelfFragment;
+import com.read.pan.fragment.GenresFragment;
 import com.read.pan.fragment.StoreFragment;
 import com.squareup.picasso.Picasso;
 import com.yamin.reader.activity.FileBrowserActivity;
@@ -48,7 +49,8 @@ import butterknife.ButterKnife;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         BookshelfFragment.OnFragmentInteractionListener,
-        StoreFragment.OnFragmentInteractionListener {
+        StoreFragment.OnFragmentInteractionListener,
+        GenresFragment.OnFragmentInteractionListener{
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -60,6 +62,8 @@ public class MainActivity extends AppCompatActivity
     String tablayoutTitle1;
     @BindString(R.string.tablelayoutTitle2)
     String tablayoutTitle2;
+    @BindString(R.string.genres)
+    String tablayoutTitle3;
     @BindView(R.id.tab_layout)
     TabLayout tabLayout;
     @BindView(R.id.view_pager)
@@ -94,10 +98,12 @@ public class MainActivity extends AppCompatActivity
         tablayoutTitle = new ArrayList<>();
         tablayoutTitle.add(tablayoutTitle1);
         tablayoutTitle.add(tablayoutTitle2);
+        tablayoutTitle.add(tablayoutTitle3);
         //初始化ViewPager的数据集
         viewPagerFragments = new ArrayList<>();
         viewPagerFragments.add(new BookshelfFragment());
         viewPagerFragments.add(new StoreFragment());
+        viewPagerFragments.add(new GenresFragment());
         application = (ReadApplication) getApplication();
     }
 
@@ -108,6 +114,7 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
         tabLayout.addTab(tabLayout.newTab().setText(tablayoutTitle.get(0)));
         tabLayout.addTab(tabLayout.newTab().setText(tablayoutTitle.get(1)));
+        tabLayout.addTab(tabLayout.newTab().setText(tablayoutTitle.get(2)));
         //创建ViewPager的adapter
         FragmentAdapter adapter = new FragmentAdapter(getSupportFragmentManager(), viewPagerFragments, tablayoutTitle);
         viewPager.setAdapter(adapter);

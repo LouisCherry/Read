@@ -6,7 +6,7 @@
 	<string name="navigation_drawer_close">关闭导航抽屉</string>
 	<string name="action_settings">设置</string>
 	<string name="tablayoutTitle1">书架</string>
-	<string name="tablelayoutTitle2">商城</string>
+	<string name="tablelayoutTitle2">排行</string>
 	<string name="navigation_menu1">导入</string>
 	<string name="navigation_menu2">喜欢</string>
 	<string name="navigation_menu4">设置</string>
@@ -53,4 +53,6 @@
 	<string name="email">邮箱</string>
 	<string name="signin">请登录</string>
 	<string name="logout">注销</string>
+	<string name="genres">类别</string>
+	<string name="genres_1">小说</string>
 </resources>

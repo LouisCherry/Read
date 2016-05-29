@@ -2,9 +2,11 @@ package com.read.pan.activity;
 
 import android.app.DownloadManager;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.AppBarLayout;
@@ -64,6 +66,8 @@ public class BookDeatilActivity extends AppCompatActivity {
     private int ifCollect = 0;
     private Book book;
     private DownloadManager downloadManager;
+    private final String ROOT_PATH = Environment.getExternalStorageDirectory()
+            .getPath();
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -95,6 +99,11 @@ public class BookDeatilActivity extends AppCompatActivity {
         initView();
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
     private void initView() {
         readApplication = (ReadApplication) getApplication();
         bookId = getIntent().getStringExtra("bookId");
@@ -111,6 +120,8 @@ public class BookDeatilActivity extends AppCompatActivity {
                 request.setAllowedNetworkTypes(
                         DownloadManager.Request.NETWORK_MOBILE
                                 | DownloadManager.Request.NETWORK_WIFI)
+                        .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+                        .setMimeType("application/com.read.pan.download")
                         .setAllowedOverRoaming(false) // 缺省是true
                         .setTitle("下载") // 用于信息查看
                         .setDescription("下载" + book.getBookName()) // 用于信息查看
@@ -118,15 +129,27 @@ public class BookDeatilActivity extends AppCompatActivity {
                                 "Read/download/" + bookId,
                                 StringUtil.getBookInfo(book.getPath(), book.getBookName()));
                 final long mDownloadId = downloadManager.enqueue(request); // 加入下载队列
-
-                startQuery(mDownloadId);
-                Snackbar.make(view, "开始下载", Snackbar.LENGTH_LONG)
-                        .setAction("取消下载", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                downloadManager.remove(mDownloadId);
-                            }
-                        }).show();
+                // 把当前下载的ID保存起来
+                String bookName=book.getBookName();
+                String bookPath=ROOT_PATH+"/Read/download/"+book.getBookId()+"/"+StringUtil.getBookInfo(book.getPath(), book.getBookName());
+                File file=new File(bookPath);
+                if(file.exists()){
+                    Snackbar.make(view, "已下载", Snackbar.LENGTH_LONG)
+                            .setAction("取消下载", null).show();
+                }else{
+                    SharedPreferences sPreferences = getSharedPreferences("downloadcomplete", 0);
+                    sPreferences.edit().putLong("refernece", mDownloadId)
+                            .putString("bookName",bookName)
+                            .putString("bookPath",bookPath).commit();
+                    startQuery(mDownloadId);
+                    Snackbar.make(view, "开始下载", Snackbar.LENGTH_LONG)
+                            .setAction("取消下载", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    downloadManager.remove(mDownloadId);
+                                }
+                            }).show();
+                }
             }
         });
         this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -168,6 +191,10 @@ public class BookDeatilActivity extends AppCompatActivity {
         super.onPause();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
     private void refreshData(String bookId) {
         String userId = "";
         if (readApplication.isLogin()) {
@@ -185,9 +212,10 @@ public class BookDeatilActivity extends AppCompatActivity {
                     bookIntroduction.setText(book.getIntroduction());
                     ifCollect = book.getIfCollect();
                     if (ifCollect == 1) {
-                        //                        MenuView.ItemView itemView= (MenuView.ItemView) findViewById(R.id.action_collect);
-                        //                        itemView.setIcon(getResources().getDrawable(R.drawable.general__shared__favour_selected));
+//                        MenuView.ItemView itemView = (MenuView.ItemView) findViewById(R.id.action_collect);
+//                        itemView.setIcon(getResources().getDrawable(R.drawable.general__shared__favour_selected));
                     }
+                    setSupportActionBar(toolbar);
                 }
                 if (response.code() == ResultCode.NODETAIL) {
                     Snackbar.make(getWindow().getDecorView(), "暂无详细信息", Snackbar.LENGTH_SHORT).setAction("action", null).show();
@@ -255,9 +283,6 @@ public class BookDeatilActivity extends AppCompatActivity {
         }
 
     }
-
-    ;
-
     private void stopQuery() {
         handler.removeCallbacks(runnable);
     }
@@ -277,22 +302,4 @@ public class BookDeatilActivity extends AppCompatActivity {
             c.close();
         }
     }
-
-    private String statusMessage(int st) {
-        switch (st) {
-            case DownloadManager.STATUS_FAILED:
-                return "Download failed";
-            case DownloadManager.STATUS_PAUSED:
-                return "Download paused";
-            case DownloadManager.STATUS_PENDING:
-                return "Download pending";
-            case DownloadManager.STATUS_RUNNING:
-                return "Download in progress!";
-            case DownloadManager.STATUS_SUCCESSFUL:
-                return "Download finished";
-            default:
-                return "Unknown Information";
-        }
-    }
-
 }

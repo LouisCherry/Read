@@ -5,7 +5,7 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_settings">Settings</string>
     <string name="tablayoutTitle1">Shelf</string>
-    <string name="tablelayoutTitle2">Store</string>
+    <string name="tablelayoutTitle2">TOP</string>
     <string name="navigation_menu1">Import</string>
     <string name="navigation_menu2">Like</string>
     <string name="navigation_menu3">Download</string>
@@ -149,4 +149,16 @@
         <item>Photo</item>
         <item>Albums</item>
     </string-array>
+    <string name="genres">GENRES</string>
+    <string name="genres_1">Novel</string>
+    <string name="genres_2">Economics</string>
+    <string name="genres_3">Inspirational</string>
+    <string name="genres_4">Humanities</string>
+    <string name="genres_5">Literature</string>
+    <string name="genres_6">IT</string>
+    <string name="genres_7">History</string>
+    <string name="genres_8">Life</string>
+    <string name="genres_9">Cartoon</string>
+    <string name="genres_10">Biography</string>
+    <string name="genres_11">Magazine</string>
 </resources>

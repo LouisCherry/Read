@@ -155,6 +155,8 @@ public class BookshelfFragment extends Fragment {
 
     @Override
     public void onDestroy() {
+        if(getCollection().status()!= IBookCollection.Status.NotStarted)
+            getCollection().unbind();
         super.onDestroy();
     }
 
