@@ -19,11 +19,6 @@
 
 package org.geometerplus.android.util;
 
-import java.util.LinkedList;
-import java.util.Queue;
-
-import org.geometerplus.zlibrary.core.resources.ZLResource;
-
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -32,6 +27,11 @@ import android.os.Message;
 import android.widget.Toast;
 
 import com.yamin.reader.view.LoadingDialog;
+
+import org.geometerplus.zlibrary.core.resources.ZLResource;
+
+import java.util.LinkedList;
+import java.util.Queue;
 
 public abstract class UIUtil {
 	private static final Object ourMonitor = new Object();
@@ -156,11 +156,11 @@ public abstract class UIUtil {
 	 * modify by yamin.cao
 	 */
 	public static void showLoading(Activity activity, String msg) {
-		if (loadDialog == null) {
+		if (loadDialog == null&&!activity.getCurrentFocus().isEnabled()) {
 			loadDialog = LoadingDialog.createDialog(activity, msg);
 			loadDialog.setCanceledOnTouchOutside(false);
+			loadDialog.show();
 		}
-		loadDialog.show();
 	}
 
 	private static void stopLoading() {

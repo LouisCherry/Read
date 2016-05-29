@@ -56,6 +56,7 @@ dependencies {
     compile 'com.github.gabrielemariotti.cards:cardslib-extra-staggeredgrid:2.1.0'
     //Optional for drag and drop
     compile 'com.github.gabrielemariotti.cards:cardslib-extra-dragdrop:2.1.0'
+    compile 'com.github.d-max:spots-dialog:0.4@aar'
     //Optional for twoway  (coming soon)
     //compile 'com.github.gabrielemariotti.cards:cardslib-extra-twoway:2.1.0'
 }

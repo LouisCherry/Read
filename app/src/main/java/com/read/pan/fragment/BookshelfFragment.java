@@ -121,20 +121,13 @@ public class BookshelfFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_bookshelf, container, false);
         ButterKnife.bind(this, view);
+        initCards();
         return view;
     }
 
     @Override
     public void onStart() {
-//        if (myFBReaderApp != null) {
-//            getCollection().unbind();
-//        }
-        initCards();
-        super.onStart();
-    }
-
-    @Override
-    public void onResume() {
+//        initCards();
         myFBReaderApp = (FBReaderApp) FBReaderApp.Instance();
         if (myFBReaderApp == null) {
             myFBReaderApp = new FBReaderApp(getActivity(),
@@ -142,6 +135,12 @@ public class BookshelfFragment extends Fragment {
         }
         getCollection().bindToService(getActivity(), null);
         new sdScanAysnTask(3).execute();
+        super.onStart();
+    }
+
+    @Override
+    public void onResume() {
+
         super.onResume();
     }
 
@@ -154,8 +153,6 @@ public class BookshelfFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-//        getCollection().unbind();
-//        super.onDestroy();
     }
 
     @Override

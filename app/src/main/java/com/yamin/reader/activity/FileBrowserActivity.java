@@ -101,6 +101,12 @@ public class FileBrowserActivity extends Activity implements
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.file_list);
 		resolver=getContentResolver();
+		myFBReaderApp = (FBReaderApp) FBReaderApp.Instance();
+		if (myFBReaderApp == null) {
+			myFBReaderApp = new FBReaderApp(FileBrowserActivity.this,
+					new BookCollectionShadow());
+		}
+		getCollection().bindToService(this, null);
 		searchitems = new ArrayList<String>();
 		lvFiles = (ListView) findViewById(R.id.file_path_list);
 		pathTextView = (TextView) findViewById(R.id.current_path_view);
@@ -114,18 +120,12 @@ public class FileBrowserActivity extends Activity implements
 
 	@Override
 	protected void onResume() {
-		myFBReaderApp = (FBReaderApp) FBReaderApp.Instance();
-		if (myFBReaderApp == null) {
-			myFBReaderApp = new FBReaderApp(FileBrowserActivity.this,
-					new BookCollectionShadow());
-		}
-		getCollection().bindToService(this, null);
 		super.onResume();
 	}
 
 	@Override
 	protected void onPause() {
-		getCollection().unbind();
+//		getCollection().unbind();
 		super.onPause();
 	}
 
