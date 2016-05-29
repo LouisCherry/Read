@@ -1,6 +1,7 @@
 package com.read.pan.activity;
 
 import android.app.DownloadManager;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -29,6 +30,8 @@ import com.read.pan.network.RestClient;
 import com.read.pan.network.ResultCode;
 import com.read.pan.util.StringUtil;
 import com.squareup.picasso.Picasso;
+import com.yamin.reader.database.DbDataOperation;
+import com.yamin.reader.database.DbTags;
 import com.yamin.reader.utils.ToolUtils;
 
 import java.io.File;
@@ -66,6 +69,7 @@ public class BookDeatilActivity extends AppCompatActivity {
     private int ifCollect = 0;
     private Book book;
     private DownloadManager downloadManager;
+    private ContentResolver resolver;
     private final String ROOT_PATH = Environment.getExternalStorageDirectory()
             .getPath();
     Handler handler = new Handler() {
@@ -105,9 +109,12 @@ public class BookDeatilActivity extends AppCompatActivity {
     }
 
     private void initView() {
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        resolver=getContentResolver();
         readApplication = (ReadApplication) getApplication();
         bookId = getIntent().getStringExtra("bookId");
-        setSupportActionBar(toolbar);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -128,15 +135,30 @@ public class BookDeatilActivity extends AppCompatActivity {
                         .setDestinationInExternalPublicDir(
                                 "Read/download/" + bookId,
                                 StringUtil.getBookInfo(book.getPath(), book.getBookName()));
-                final long mDownloadId = downloadManager.enqueue(request); // 加入下载队列
                 // 把当前下载的ID保存起来
                 String bookName=book.getBookName();
                 String bookPath=ROOT_PATH+"/Read/download/"+book.getBookId()+"/"+StringUtil.getBookInfo(book.getPath(), book.getBookName());
                 File file=new File(bookPath);
                 if(file.exists()){
+                    com.yamin.reader.model.Book b = DbDataOperation.queryBook(resolver, DbTags.FIELD_BOOK_NAME,bookName);
+                    if(b==null){
+                        com.yamin.reader.model.Book book = new com.yamin.reader.model.Book();
+                        book.setBookName(bookName);
+                        book.setBookPath(bookPath);
+                        String bookSize=null;
+                        if(bookPath!=null){
+                            File file1=new File(bookPath);
+                            if(file1.isFile()){
+                                bookSize= ToolUtils.FormetFileSize(file1.length());
+                            }
+                        }
+                        book.setBookSize(bookSize);
+                        DbDataOperation.insertToBookInfo(resolver, book);
+                    }
                     Snackbar.make(view, "已下载", Snackbar.LENGTH_LONG)
                             .setAction("取消下载", null).show();
                 }else{
+                    final long mDownloadId = downloadManager.enqueue(request); // 加入下载队列
                     SharedPreferences sPreferences = getSharedPreferences("downloadcomplete", 0);
                     sPreferences.edit().putLong("refernece", mDownloadId)
                             .putString("bookName",bookName)
@@ -152,8 +174,6 @@ public class BookDeatilActivity extends AppCompatActivity {
                 }
             }
         });
-        this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        this.getSupportActionBar().setDisplayShowTitleEnabled(false);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -215,7 +235,6 @@ public class BookDeatilActivity extends AppCompatActivity {
 //                        MenuView.ItemView itemView = (MenuView.ItemView) findViewById(R.id.action_collect);
 //                        itemView.setIcon(getResources().getDrawable(R.drawable.general__shared__favour_selected));
                     }
-                    setSupportActionBar(toolbar);
                 }
                 if (response.code() == ResultCode.NODETAIL) {
                     Snackbar.make(getWindow().getDecorView(), "暂无详细信息", Snackbar.LENGTH_SHORT).setAction("action", null).show();
