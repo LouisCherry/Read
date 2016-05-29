@@ -319,7 +319,9 @@ public class FileBrowserActivity extends Activity implements
 		// TODO Auto-generated method stub
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			//
-			if (current_dir.getParent().equals(ROOT_PATH)) {
+			File root=new File(ROOT_PATH);
+			String rootP=root.getParent();
+			if (current_dir.getParent().equals(rootP)) {
 				finish();
 			} else {
 				browseUpLevel();
