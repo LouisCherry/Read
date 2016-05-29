@@ -26,6 +26,7 @@ import com.yamin.reader.database.DbDataOperation;
 import com.yamin.reader.model.Book;
 
 import org.geometerplus.android.fbreader.libraryService.BookCollectionShadow;
+import org.geometerplus.fbreader.book.IBookCollection;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
 import org.geometerplus.zlibrary.core.filesystem.ZLFile;
 
@@ -133,7 +134,8 @@ public class BookshelfFragment extends Fragment {
             myFBReaderApp = new FBReaderApp(getActivity(),
                     new BookCollectionShadow());
         }
-        getCollection().bindToService(getActivity(), null);
+        if(getCollection().status()== IBookCollection.Status.NotStarted)
+            getCollection().bindToService(getActivity(), null);
         new sdScanAysnTask(3).execute();
         super.onStart();
     }
@@ -146,7 +148,8 @@ public class BookshelfFragment extends Fragment {
 
     @Override
     public void onPause() {
-        getCollection().unbind();
+        if(getCollection().status()!= IBookCollection.Status.NotStarted)
+            getCollection().unbind();
         super.onPause();
     }
 

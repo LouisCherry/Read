@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import org.geometerplus.android.fbreader.libraryService.BookCollectionShadow;
+import org.geometerplus.fbreader.book.IBookCollection;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
 import org.geometerplus.zlibrary.core.filesystem.ZLFile;
 import android.app.Activity;
@@ -106,7 +107,8 @@ public class FileBrowserActivity extends Activity implements
 			myFBReaderApp = new FBReaderApp(FileBrowserActivity.this,
 					new BookCollectionShadow());
 		}
-		getCollection().bindToService(this, null);
+		if(getCollection().status()== IBookCollection.Status.NotStarted)
+			getCollection().bindToService(this, null);
 		searchitems = new ArrayList<String>();
 		lvFiles = (ListView) findViewById(R.id.file_path_list);
 		pathTextView = (TextView) findViewById(R.id.current_path_view);
@@ -470,7 +472,8 @@ public class FileBrowserActivity extends Activity implements
 
 	@Override
 	protected void onDestroy() {
-		getCollection().unbind();
+		if(getCollection().status()!= IBookCollection.Status.NotStarted)
+			getCollection().unbind();
 		Log.i("MAIN", "onDestroy()");
 		if(mPopuwindow!=null&&mPopuwindow.isShowing()){
 			mPopuwindow.dismiss();

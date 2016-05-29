@@ -1,9 +1,49 @@
 package com.yamin.reader.activity;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.SearchManager;
+import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.res.Configuration;
+import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.os.PowerManager;
+import android.util.Log;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.Gallery;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
+import android.widget.SeekBar;
+import android.widget.Spinner;
+import android.widget.Toast;
+
+import com.read.pan.R;
+import com.yamin.reader.adapter.PopGalleryAdapter;
+import com.yamin.reader.database.DbDataOperation;
+import com.yamin.reader.utils.ToolUtils;
+import com.yamin.reader.view.SwitchButton;
 
 import org.geometerplus.android.fbreader.NavigationPopup;
 import org.geometerplus.android.fbreader.PopupPanel;
@@ -52,49 +92,11 @@ import org.geometerplus.zlibrary.ui.android.library.ZLAndroidLibrary;
 import org.geometerplus.zlibrary.ui.android.view.AndroidFontUtil;
 import org.geometerplus.zlibrary.ui.android.view.ZLAndroidWidget;
 
-import android.app.Activity;
-import android.app.SearchManager;
-import android.content.BroadcastReceiver;
-import android.content.ContentResolver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.res.Configuration;
-import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.os.PowerManager;
-import android.util.Log;
-import android.view.KeyEvent;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
-import android.view.animation.AnimationUtils;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.Gallery;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.PopupWindow;
-import android.widget.RelativeLayout;
-import android.widget.ScrollView;
-import android.widget.SeekBar;
-import android.widget.Spinner;
-import android.widget.Toast;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
-import com.read.pan.R;
-import com.yamin.reader.adapter.PopGalleryAdapter;
-import com.yamin.reader.database.DbDataOperation;
-import com.yamin.reader.utils.ToolUtils;
-import com.yamin.reader.view.SwitchButton;
 
 /**
  * 
@@ -628,7 +630,6 @@ public class CoreReadActivity extends Activity {
 	@Override
 	protected void onStart() {
 		super.onStart();
-
 		getCollection().bindToService(this, new Runnable() {
 			public void run() {
 				new Thread() {
@@ -641,7 +642,6 @@ public class CoreReadActivity extends Activity {
 				myFBReaderApp.getViewWidget().repaint();
 			}
 		});
-
 		initPluginActions();
 
 		final ZLAndroidLibrary zlibrary = (ZLAndroidLibrary) ZLibrary
@@ -688,7 +688,6 @@ public class CoreReadActivity extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-
 		myStartTimer = true;
 		final int brightnessLevel = getZLibrary().ScreenBrightnessLevelOption
 				.getValue();
@@ -786,7 +785,7 @@ public class CoreReadActivity extends Activity {
 
 	//
 	public void backPress() {
-		if(myFBReaderApp.Model!=null){
+		if(myFBReaderApp.Model!=null&&myBook!=null){
 			int y = myFBReaderApp.getTextView().pagePosition().Current;
 			int z = myFBReaderApp.getTextView().pagePosition().Total;
 			DbDataOperation.updateValuesToTable(resolver,

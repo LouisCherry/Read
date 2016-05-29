@@ -37,7 +37,6 @@ public abstract class UIUtil {
 	private static final Object ourMonitor = new Object();
 	private static ProgressDialog ourProgress;
 	private static LoadingDialog loadDialog = null;
-
 	private static class Pair {
 		final Runnable Action;
 		final String Message;
@@ -119,20 +118,23 @@ public abstract class UIUtil {
 	public static void runWithMessage(final Activity activity, String key,
 			final Runnable action, final Runnable postAction,
 			final boolean minPriority) {
-		// final String message =
-		// ZLResource.resource("dialog").getResource("waitMessage").getResource(key).getValue();
+//		final AlertDialog dialog;
+		final ZLResource myResource =
+				ZLResource.resource("dialog").getResource("waitMessage");
+		final String message = myResource.getResource(key).getValue();
 		activity.runOnUiThread(new Runnable() {
 			public void run() {
 				// final ProgressDialog progress = ProgressDialog.show(activity,
 				// null, "请稍后...加载中", true, false);
-				showLoading(activity, "请稍后...加载中");
+//				showLoading(activity, "请稍后...加载中");
+				final ProgressDialog progress = ProgressDialog.show(activity, null,"请稍后...加载中", true, false);
 				final Thread runner = new Thread() {
 					public void run() {
 						action.run();
 						activity.runOnUiThread(new Runnable() {
 							public void run() {
 								try {
-									// progress.dismiss();
+									 progress.dismiss();
 									stopLoading();
 								} catch (Exception e) {
 									e.printStackTrace();
@@ -156,11 +158,11 @@ public abstract class UIUtil {
 	 * modify by yamin.cao
 	 */
 	public static void showLoading(Activity activity, String msg) {
-		if (loadDialog == null&&!activity.getCurrentFocus().isEnabled()) {
+//		if (loadDialog == null) {
 			loadDialog = LoadingDialog.createDialog(activity, msg);
 			loadDialog.setCanceledOnTouchOutside(false);
 			loadDialog.show();
-		}
+//		}
 	}
 
 	private static void stopLoading() {
