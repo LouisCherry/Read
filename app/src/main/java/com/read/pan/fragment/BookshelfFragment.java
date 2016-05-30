@@ -136,7 +136,6 @@ public class BookshelfFragment extends Fragment {
         }
         if(getCollection().status()== IBookCollection.Status.NotStarted)
             getCollection().bindToService(getActivity(), null);
-        new sdScanAysnTask(3).execute();
         super.onStart();
     }
 
@@ -534,5 +533,12 @@ public class BookshelfFragment extends Fragment {
             return fileSuffix;
         }
         return null;
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        if (isVisibleToUser) {
+            new sdScanAysnTask(3).execute();
+        }
     }
 }

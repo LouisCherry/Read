@@ -161,4 +161,7 @@
     <string name="genres_9">Cartoon</string>
     <string name="genres_10">Biography</string>
     <string name="genres_11">Magazine</string>
+    <string name="ifdeletecollect">If Delete The Collect ?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>

@@ -1,6 +1,8 @@
 package com.read.pan.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -14,6 +16,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.GravityEnum;
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.afollestad.materialdialogs.Theme;
 import com.read.pan.R;
 import com.read.pan.adapter.SearchAdapter;
 import com.read.pan.app.ReadApplication;
@@ -26,6 +32,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -120,8 +127,28 @@ public class CollectActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onItemLongClick(View view, int position) {
-
+            public void onItemLongClick(final View view, final int position) {
+                new MaterialDialog.Builder(CollectActivity.this)
+                        .title(R.string.ifdeletecollect)
+                        .positiveText(R.string.yes)
+                        .negativeText(R.string.no)
+                        .positiveColorRes(R.color.material_red_400)
+                        .negativeColorRes(R.color.material_red_400)
+                        .titleColorRes(R.color.material_red_400)
+                        .backgroundColorRes(R.color.material_blue_grey_800)
+                        .dividerColorRes(R.color.material_teal_a400)
+                        .btnSelector(R.drawable.md_btn_selector_custom, DialogAction.POSITIVE)
+                        .positiveColor(Color.WHITE)
+                        .negativeColorAttr(android.R.attr.textColorSecondaryInverse)
+                        .theme(Theme.DARK)
+                        .titleGravity(GravityEnum.CENTER)
+                        .dismissListener(new DialogInterface.OnDismissListener() {
+                            @Override
+                            public void onDismiss(DialogInterface dialog) {
+                                deleteCollect(view,books.get(position).getBookId());
+                            }
+                        })
+                        .show();
             }
         });
         searchRefresher.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -186,5 +213,31 @@ public class CollectActivity extends AppCompatActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+    public void deleteCollect(final View rootView,String bookId){
+        if(readApplication.isLogin()) {
+            searchRefresher.setRefreshing(true);
+            String userId = readApplication.getLoginUser().getUserId();
+            RestClient.userApi().deleteCollect(userId,bookId).enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    int code = response.code();
+                    if (code == ResultCode.SUCCESS) {
+                        Snackbar.make(rootView, "收藏删除成功", Snackbar.LENGTH_SHORT).setAction("action", null).show();
+                        refreshData(rootView,0);
+                    }
+                    if (code == ResultCode.NOBOOK) {
+                        Snackbar.make(rootView, "收藏删除失败，该书籍不存在", Snackbar.LENGTH_SHORT).setAction("action", null).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    Snackbar.make(rootView, "网络连接失败", Snackbar.LENGTH_SHORT).setAction("action", null).show();
+                }
+            });
+        }else{
+            startActivity(new Intent(getBaseContext(),LoginActivity.class));
+        }
     }
 }

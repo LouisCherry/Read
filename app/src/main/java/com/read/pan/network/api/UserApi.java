@@ -61,6 +61,14 @@ public interface UserApi {
      * @param bookId 书籍id
      */
     Call<ResponseBody> collect(@Field("userId")String userId, @Path("bookId") String bookId);
+    @FormUrlEncoded
+    @POST("user/collect/delete/{bookId}")
+    /**
+     * 收藏
+     * @param userId 用户id
+     * @param bookId 书籍id
+     */
+    Call<ResponseBody> deleteCollect(@Field("userId")String userId, @Path("bookId") String bookId);
 
     @GET("user/{userId}/like/list")
     /**

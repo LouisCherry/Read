@@ -48,4 +48,7 @@
     <color name="primary_dark">#E12929</color>
     <color name="primary_darker">#CC1D1D</color>
     <color name="accent">#FFFFFF</color>
+    <color name="material_red_400">#EF5350</color>
+    <color name="material_blue_grey_800">#ff37474f</color>
+    <color name="material_teal_a400">#1DE9B6</color>
 </resources>

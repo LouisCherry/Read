@@ -14,6 +14,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.menu.MenuView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -179,9 +180,6 @@ public class BookDeatilActivity extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_collect:
-                        if (ifCollect == 1) {
-                            break;
-                        }
                         collect(item, bookId);
                         break;
                 }
@@ -232,8 +230,8 @@ public class BookDeatilActivity extends AppCompatActivity {
                     bookIntroduction.setText(book.getIntroduction());
                     ifCollect = book.getIfCollect();
                     if (ifCollect == 1) {
-//                        MenuView.ItemView itemView = (MenuView.ItemView) findViewById(R.id.action_collect);
-//                        itemView.setIcon(getResources().getDrawable(R.drawable.general__shared__favour_selected));
+                        MenuView.ItemView itemView = (MenuView.ItemView) findViewById(R.id.action_collect);
+                        itemView.setIcon(getResources().getDrawable(R.drawable.general__shared__favour_selected));
                     }
                 }
                 if (response.code() == ResultCode.NODETAIL) {
@@ -252,23 +250,46 @@ public class BookDeatilActivity extends AppCompatActivity {
         if (readApplication.isLogin()) {
             String userId = readApplication.getLoginUser().getUserId();
             if (userId != null) {
-                RestClient.userApi().collect(userId, bookId).enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        if (response.code() == ResultCode.SUCCESS) {
-                            menuItem.setIcon(R.drawable.general__shared__favour_selected);
-                            Snackbar.make(getWindow().getDecorView(), "收藏成功", Snackbar.LENGTH_SHORT).setAction("action", null).show();
+                if(ifCollect==1){
+                    RestClient.userApi().deleteCollect(userId,bookId).enqueue(new Callback<ResponseBody>() {
+                        @Override
+                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                            int code = response.code();
+                            if (code == ResultCode.SUCCESS) {
+                                Snackbar.make(getWindow().getDecorView(), "取消收藏", Snackbar.LENGTH_SHORT).setAction("action", null).show();
+                                menuItem.setIcon(R.drawable.general__shared__favour_normal);
+                            }
+                            if (code == ResultCode.NOBOOK) {
+                                Snackbar.make(getWindow().getDecorView(), "取消收藏失败，该书籍不存在", Snackbar.LENGTH_SHORT).setAction("action", null).show();
+                            }
                         }
-                        if (response.code() == ResultCode.NOBOOK) {
-                            Snackbar.make(getWindow().getDecorView(), "无法收藏，该书籍不存在", Snackbar.LENGTH_SHORT).setAction("action", null).show();
-                        }
-                    }
 
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        Snackbar.make(getWindow().getDecorView(), "网络连接失败", Snackbar.LENGTH_SHORT).setAction("action", null).show();
-                    }
-                });
+                        @Override
+                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                            Snackbar.make(getWindow().getDecorView(), "网络连接失败", Snackbar.LENGTH_SHORT).setAction("action", null).show();
+                        }
+                    });
+                }else{
+                    RestClient.userApi().collect(userId, bookId).enqueue(new Callback<ResponseBody>() {
+                        @Override
+                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                            if (response.code() == ResultCode.SUCCESS) {
+                                menuItem.setIcon(R.drawable.general__shared__favour_selected);
+                                String name="收藏成功";
+                                name=name.replaceAll(" ","");
+                                Snackbar.make(getWindow().getDecorView(),name , Snackbar.LENGTH_SHORT).setAction("action", null).show();
+                            }
+                            if (response.code() == ResultCode.NOBOOK) {
+                                Snackbar.make(getWindow().getDecorView(), "无法收藏，该书籍不存在", Snackbar.LENGTH_SHORT).setAction("action", null).show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                            Snackbar.make(getWindow().getDecorView(), "网络连接失败", Snackbar.LENGTH_SHORT).setAction("action", null).show();
+                        }
+                    });
+                }
             } else {
                 startActivity(new Intent(getBaseContext(), LoginActivity.class));
             }
@@ -279,6 +300,7 @@ public class BookDeatilActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        refreshData(bookId);
         getMenuInflater().inflate(R.menu.menu_book_deatil, menu);
         return super.onCreateOptionsMenu(menu);
     }
