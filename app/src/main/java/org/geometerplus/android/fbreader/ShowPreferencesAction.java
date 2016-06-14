@@ -19,12 +19,12 @@
 
 package org.geometerplus.android.fbreader;
 
-import org.geometerplus.android.fbreader.preferences.PreferenceActivity;
-import org.geometerplus.fbreader.fbreader.FBReaderApp;
-
 import android.content.Intent;
 
-import com.yamin.reader.activity.CoreReadActivity;
+import com.read.pan.activity.CoreReadActivity;
+
+import org.geometerplus.android.fbreader.preferences.PreferenceActivity;
+import org.geometerplus.fbreader.fbreader.FBReaderApp;
 
 public class ShowPreferencesAction extends FBAndroidAction {
 	public ShowPreferencesAction(CoreReadActivity baseActivity, FBReaderApp fbreader) {

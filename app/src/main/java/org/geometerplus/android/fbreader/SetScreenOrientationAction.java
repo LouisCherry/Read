@@ -26,7 +26,7 @@ import org.geometerplus.zlibrary.core.util.ZLBoolean3;
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
 
-import com.yamin.reader.activity.CoreReadActivity;
+import com.read.pan.activity.CoreReadActivity;
 
  public class SetScreenOrientationAction extends FBAndroidAction {
 	public static void setOrientation(Activity activity, String optionValue) {

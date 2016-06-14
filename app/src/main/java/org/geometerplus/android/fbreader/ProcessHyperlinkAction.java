@@ -19,6 +19,11 @@
 
 package org.geometerplus.android.fbreader;
 
+import android.content.Intent;
+import android.net.Uri;
+
+import com.read.pan.activity.CoreReadActivity;
+
 import org.geometerplus.android.fbreader.image.ImageViewActivity;
 import org.geometerplus.fbreader.bookmodel.FBHyperlinkType;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
@@ -27,11 +32,6 @@ import org.geometerplus.zlibrary.text.view.ZLTextHyperlinkRegionSoul;
 import org.geometerplus.zlibrary.text.view.ZLTextImageRegionSoul;
 import org.geometerplus.zlibrary.text.view.ZLTextRegion;
 import org.geometerplus.zlibrary.text.view.ZLTextWordRegionSoul;
-
-import android.content.Intent;
-import android.net.Uri;
-
-import com.yamin.reader.activity.CoreReadActivity;
 
 public class ProcessHyperlinkAction extends FBAndroidAction {
 	public ProcessHyperlinkAction(CoreReadActivity baseActivity, FBReaderApp fbreader) {

@@ -10,16 +10,16 @@
             android:id="@+id/nav_like"
             android:icon="@drawable/ic_menu_gallery"
             android:title="@string/navigation_menu2" />
-        <item
+<!--        <item
             android:id="@+id/nav_download"
             android:icon="@drawable/ic_menu_slideshow"
             android:title="@string/navigation_menu3" />
         <item
             android:id="@+id/nav_setting"
             android:icon="@drawable/ic_menu_manage"
-            android:title="@string/navigation_menu4" />
+            android:title="@string/navigation_menu4" />-->
     </group>
-
+<!--
     <item android:title="Communicate">
         <menu>
             <item
@@ -31,6 +31,6 @@
                 android:icon="@drawable/ic_menu_send"
                 android:title="@string/navigation_menu6" />
         </menu>
-    </item>
+    </item>-->
 
 </menu>

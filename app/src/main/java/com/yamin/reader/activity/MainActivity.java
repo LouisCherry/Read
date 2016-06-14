@@ -1,18 +1,5 @@
 package com.yamin.reader.activity;
 
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import org.geometerplus.android.fbreader.libraryService.BookCollectionShadow;
-import org.geometerplus.fbreader.book.Author;
-import org.geometerplus.fbreader.fbreader.FBReaderApp;
-import org.geometerplus.zlibrary.core.filesystem.ZLFile;
-import org.geometerplus.zlibrary.core.language.Language;
-import org.geometerplus.zlibrary.core.language.ZLLanguageUtil;
-
 import android.app.ActionBar;
 import android.app.ActionBar.OnNavigationListener;
 import android.app.Activity;
@@ -52,6 +39,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.read.pan.R;
+import com.read.pan.activity.CoreReadActivity;
 import com.yamin.reader.adapter.BookHisFavAdaper;
 import com.yamin.reader.adapter.BookShelfListAdaper;
 import com.yamin.reader.adapter.ScanFileAdapter;
@@ -62,6 +50,19 @@ import com.yamin.reader.utils.Commons;
 import com.yamin.reader.utils.ToolUtils;
 import com.yamin.reader.view.CustomDialog;
 import com.yamin.reader.view.LoadingDialog;
+
+import org.geometerplus.android.fbreader.libraryService.BookCollectionShadow;
+import org.geometerplus.fbreader.book.Author;
+import org.geometerplus.fbreader.fbreader.FBReaderApp;
+import org.geometerplus.zlibrary.core.filesystem.ZLFile;
+import org.geometerplus.zlibrary.core.language.Language;
+import org.geometerplus.zlibrary.core.language.ZLLanguageUtil;
+
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * 

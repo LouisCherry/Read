@@ -20,7 +20,7 @@ import android.widget.TextView;
 
 import com.read.pan.R;
 import com.read.pan.util.ReadUtils;
-import com.yamin.reader.activity.CoreReadActivity;
+import com.read.pan.activity.CoreReadActivity;
 import com.yamin.reader.adapter.ScanFileAdapter;
 import com.yamin.reader.database.DbDataOperation;
 import com.yamin.reader.model.Book;

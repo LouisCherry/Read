@@ -19,12 +19,12 @@
 
 package org.geometerplus.android.fbreader;
 
-import org.geometerplus.fbreader.fbreader.FBReaderApp;
-import org.geometerplus.zlibrary.core.resources.ZLResource;
-
 import android.content.Intent;
 
-import com.yamin.reader.activity.CoreReadActivity;
+import com.read.pan.activity.CoreReadActivity;
+
+import org.geometerplus.fbreader.fbreader.FBReaderApp;
+import org.geometerplus.zlibrary.core.resources.ZLResource;
 
 public class SelectionShareAction extends FBAndroidAction {
 	public SelectionShareAction(CoreReadActivity baseActivity, FBReaderApp fbreader) {

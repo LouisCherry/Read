@@ -21,7 +21,7 @@ package org.geometerplus.android.fbreader;
 import android.widget.RelativeLayout;
 
 import com.read.pan.R;
-import com.yamin.reader.activity.CoreReadActivity;
+import com.read.pan.activity.CoreReadActivity;
 
 import org.geometerplus.fbreader.fbreader.ActionCode;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;

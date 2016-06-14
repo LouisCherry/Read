@@ -1,14 +1,5 @@
 package com.yamin.reader.activity;
 
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-
-import org.geometerplus.android.fbreader.libraryService.BookCollectionShadow;
-import org.geometerplus.fbreader.fbreader.FBReaderApp;
-import org.geometerplus.zlibrary.core.filesystem.ZLFile;
-
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.SearchManager;
@@ -35,12 +26,22 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.read.pan.R;
+import com.read.pan.activity.CoreReadActivity;
 import com.yamin.reader.adapter.FileListAdapter;
 import com.yamin.reader.database.DbDataOperation;
 import com.yamin.reader.database.DbTags;
 import com.yamin.reader.model.Book;
 import com.yamin.reader.model.FileItem;
 import com.yamin.reader.utils.ToolUtils;
+
+import org.geometerplus.android.fbreader.libraryService.BookCollectionShadow;
+import org.geometerplus.fbreader.fbreader.FBReaderApp;
+import org.geometerplus.zlibrary.core.filesystem.ZLFile;
+
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 
 public class FileSearchResultActivity extends Activity {
 	private ListView resultLV;

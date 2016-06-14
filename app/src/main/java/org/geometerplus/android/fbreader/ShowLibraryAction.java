@@ -19,13 +19,13 @@
 
 package org.geometerplus.android.fbreader;
 
-import org.geometerplus.fbreader.book.SerializerUtil;
-import org.geometerplus.fbreader.fbreader.FBReaderApp;
-
 import android.content.Intent;
 
-import com.yamin.reader.activity.CoreReadActivity;
-import com.yamin.reader.activity.MainActivity;
+import com.read.pan.MainActivity;
+import com.read.pan.activity.CoreReadActivity;
+
+import org.geometerplus.fbreader.book.SerializerUtil;
+import org.geometerplus.fbreader.fbreader.FBReaderApp;
 
 public class ShowLibraryAction extends FBAndroidAction {
 	public ShowLibraryAction(CoreReadActivity baseActivity, FBReaderApp fbreader) {

@@ -162,9 +162,11 @@ public class StoreFragment extends Fragment{
     bookStoreAdapter.setOnItemClickLitener(new BookStoreAdapter.OnItemClickLitener() {
         @Override
         public void onItemClick(View view, int position) {
-            getActivity().startActivity(
-                    new Intent(getContext(), BookDeatilActivity.class)
-                            .putExtra("bookId",books.get(position).getBookId()));
+            if(books!=null&&books.size()>0){
+                getActivity().startActivity(
+                        new Intent(getContext(), BookDeatilActivity.class)
+                                .putExtra("bookId",books.get(position).getBookId()));
+            }
         }
 
         @Override

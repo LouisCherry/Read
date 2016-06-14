@@ -19,16 +19,16 @@
 
 package org.geometerplus.android.fbreader;
 
+import android.content.Intent;
+
+import com.read.pan.activity.CoreReadActivity;
+
 import org.geometerplus.android.fbreader.style.StyleListActivity;
 import org.geometerplus.android.util.UIUtil;
 import org.geometerplus.fbreader.book.Bookmark;
 import org.geometerplus.fbreader.book.SerializerUtil;
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
 import org.geometerplus.zlibrary.core.resources.ZLResource;
-
-import android.content.Intent;
-
-import com.yamin.reader.activity.CoreReadActivity;
 
 public class SelectionBookmarkAction extends FBAndroidAction {
 	public  SelectionBookmarkAction(CoreReadActivity baseApplication, FBReaderApp fbreader) {

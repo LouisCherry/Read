@@ -19,11 +19,11 @@
 
 package org.geometerplus.android.fbreader;
 
-import org.geometerplus.fbreader.fbreader.FBReaderApp;
-
 import android.content.Intent;
 
-import com.yamin.reader.activity.CoreReadActivity;
+import com.read.pan.activity.CoreReadActivity;
+
+import org.geometerplus.fbreader.fbreader.FBReaderApp;
 
 public class ShowTOCAction extends FBAndroidAction {
 	public ShowTOCAction(CoreReadActivity baseActivity, FBReaderApp fbreader) {

@@ -19,14 +19,14 @@
 
 package org.geometerplus.android.fbreader;
 
-import org.geometerplus.android.util.UIUtil;
-import org.geometerplus.fbreader.fbreader.FBReaderApp;
-import org.geometerplus.zlibrary.core.resources.ZLResource;
-
 import android.app.Application;
 import android.text.ClipboardManager;
 
-import com.yamin.reader.activity.CoreReadActivity;
+import com.read.pan.activity.CoreReadActivity;
+
+import org.geometerplus.android.util.UIUtil;
+import org.geometerplus.fbreader.fbreader.FBReaderApp;
+import org.geometerplus.zlibrary.core.resources.ZLResource;
 
 public class SelectionCopyAction extends FBAndroidAction {
 	public SelectionCopyAction(CoreReadActivity baseActivity, FBReaderApp fbreader) {

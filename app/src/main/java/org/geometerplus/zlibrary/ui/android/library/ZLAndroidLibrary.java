@@ -19,22 +19,6 @@
 
 package org.geometerplus.zlibrary.ui.android.library;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.TreeSet;
-
-import org.geometerplus.zlibrary.core.filesystem.ZLFile;
-import org.geometerplus.zlibrary.core.filesystem.ZLResourceFile;
-import org.geometerplus.zlibrary.core.library.ZLibrary;
-import org.geometerplus.zlibrary.core.options.ZLBooleanOption;
-import org.geometerplus.zlibrary.core.options.ZLIntegerRangeOption;
-import org.geometerplus.zlibrary.ui.android.view.ZLAndroidWidget;
-
 import android.app.Application;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
@@ -45,7 +29,23 @@ import android.telephony.TelephonyManager;
 import android.text.format.DateFormat;
 import android.util.DisplayMetrics;
 
-import com.yamin.reader.activity.CoreReadActivity;
+import com.read.pan.activity.CoreReadActivity;
+
+import org.geometerplus.zlibrary.core.filesystem.ZLFile;
+import org.geometerplus.zlibrary.core.filesystem.ZLResourceFile;
+import org.geometerplus.zlibrary.core.library.ZLibrary;
+import org.geometerplus.zlibrary.core.options.ZLBooleanOption;
+import org.geometerplus.zlibrary.core.options.ZLIntegerRangeOption;
+import org.geometerplus.zlibrary.ui.android.view.ZLAndroidWidget;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.TreeSet;
 
 public final class ZLAndroidLibrary extends ZLibrary {
 	public final ZLBooleanOption ShowStatusBarOption = new ZLBooleanOption("LookNFeel", "ShowStatusBar", hasNoHardwareMenuButton());

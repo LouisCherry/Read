@@ -119,59 +119,63 @@ public class BookDeatilActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                downloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
-                DownloadManager.Request request = new DownloadManager.Request(
-                        Uri.parse(book.getPath()));
-                File fold = new File("Read/download");
-                if (fold.isDirectory() && !fold.exists())
-                    fold.mkdirs();
-                request.setAllowedNetworkTypes(
-                        DownloadManager.Request.NETWORK_MOBILE
-                                | DownloadManager.Request.NETWORK_WIFI)
-                        .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
-                        .setMimeType("application/com.read.pan.download")
-                        .setAllowedOverRoaming(false) // 缺省是true
-                        .setTitle("下载") // 用于信息查看
-                        .setDescription("下载" + book.getBookName()) // 用于信息查看
-                        .setDestinationInExternalPublicDir(
-                                "Read/download/" + bookId,
-                                StringUtil.getBookInfo(book.getPath(), book.getBookName()));
-                // 把当前下载的ID保存起来
-                String bookName=book.getBookName();
-                String bookPath=ROOT_PATH+"/Read/download/"+book.getBookId()+"/"+StringUtil.getBookInfo(book.getPath(), book.getBookName());
-                File file=new File(bookPath);
-                if(file.exists()){
-                    com.yamin.reader.model.Book b = DbDataOperation.queryBook(resolver, DbTags.FIELD_BOOK_NAME,bookName);
-                    if(b==null){
-                        com.yamin.reader.model.Book book = new com.yamin.reader.model.Book();
-                        book.setBookName(bookName);
-                        book.setBookPath(bookPath);
-                        String bookSize=null;
-                        if(bookPath!=null){
-                            File file1=new File(bookPath);
-                            if(file1.isFile()){
-                                bookSize= ToolUtils.FormetFileSize(file1.length());
-                            }
-                        }
-                        book.setBookSize(bookSize);
-                        DbDataOperation.insertToBookInfo(resolver, book);
-                    }
-                    Snackbar.make(view, "已下载", Snackbar.LENGTH_LONG)
-                            .setAction("取消下载", null).show();
-                }else{
-                    final long mDownloadId = downloadManager.enqueue(request); // 加入下载队列
-                    SharedPreferences sPreferences = getSharedPreferences("downloadcomplete", 0);
-                    sPreferences.edit().putLong("refernece", mDownloadId)
-                            .putString("bookName",bookName)
-                            .putString("bookPath",bookPath).commit();
-                    startQuery(mDownloadId);
-                    Snackbar.make(view, "开始下载", Snackbar.LENGTH_LONG)
-                            .setAction("取消下载", new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    downloadManager.remove(mDownloadId);
+                if(readApplication.isLogin()){
+                    downloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+                    DownloadManager.Request request = new DownloadManager.Request(
+                            Uri.parse(book.getPath()));
+                    File fold = new File("Read/download");
+                    if (fold.isDirectory() && !fold.exists())
+                        fold.mkdirs();
+                    request.setAllowedNetworkTypes(
+                            DownloadManager.Request.NETWORK_MOBILE
+                                    | DownloadManager.Request.NETWORK_WIFI)
+                            .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+                            .setMimeType("application/com.read.pan.download")
+                            .setAllowedOverRoaming(false) // 缺省是true
+                            .setTitle("下载") // 用于信息查看
+                            .setDescription("下载" + book.getBookName()) // 用于信息查看
+                            .setDestinationInExternalPublicDir(
+                                    "Read/download/" + bookId,
+                                    StringUtil.getBookInfo(book.getPath(), book.getBookName()));
+                    // 把当前下载的ID保存起来
+                    String bookName=book.getBookName();
+                    String bookPath=ROOT_PATH+"/Read/download/"+book.getBookId()+"/"+StringUtil.getBookInfo(book.getPath(), book.getBookName());
+                    File file=new File(bookPath);
+                    if(file.exists()){
+                        com.yamin.reader.model.Book b = DbDataOperation.queryBook(resolver, DbTags.FIELD_BOOK_NAME,bookName);
+                        if(b==null){
+                            com.yamin.reader.model.Book book = new com.yamin.reader.model.Book();
+                            book.setBookName(bookName);
+                            book.setBookPath(bookPath);
+                            String bookSize=null;
+                            if(bookPath!=null){
+                                File file1=new File(bookPath);
+                                if(file1.isFile()){
+                                    bookSize= ToolUtils.FormetFileSize(file1.length());
                                 }
-                            }).show();
+                            }
+                            book.setBookSize(bookSize);
+                            DbDataOperation.insertToBookInfo(resolver, book);
+                        }
+                        Snackbar.make(view, "已下载", Snackbar.LENGTH_LONG)
+                                .setAction("取消下载", null).show();
+                    }else{
+                        final long mDownloadId = downloadManager.enqueue(request); // 加入下载队列
+                        SharedPreferences sPreferences = getSharedPreferences("downloadcomplete", 0);
+                        sPreferences.edit().putLong("refernece", mDownloadId)
+                                .putString("bookName",bookName)
+                                .putString("bookPath",bookPath).commit();
+                        startQuery(mDownloadId);
+                        Snackbar.make(view, "开始下载", Snackbar.LENGTH_LONG)
+                                .setAction("取消下载", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        downloadManager.remove(mDownloadId);
+                                    }
+                                }).show();
+                    }
+                }else{
+                    startActivity(new Intent(getBaseContext(), LoginActivity.class));
                 }
             }
         });
@@ -258,6 +262,7 @@ public class BookDeatilActivity extends AppCompatActivity {
                             if (code == ResultCode.SUCCESS) {
                                 Snackbar.make(getWindow().getDecorView(), "取消收藏", Snackbar.LENGTH_SHORT).setAction("action", null).show();
                                 menuItem.setIcon(R.drawable.general__shared__favour_normal);
+                                ifCollect=0;
                             }
                             if (code == ResultCode.NOBOOK) {
                                 Snackbar.make(getWindow().getDecorView(), "取消收藏失败，该书籍不存在", Snackbar.LENGTH_SHORT).setAction("action", null).show();
@@ -276,6 +281,7 @@ public class BookDeatilActivity extends AppCompatActivity {
                             if (response.code() == ResultCode.SUCCESS) {
                                 menuItem.setIcon(R.drawable.general__shared__favour_selected);
                                 String name="收藏成功";
+                                ifCollect=1;
                                 name=name.replaceAll(" ","");
                                 Snackbar.make(getWindow().getDecorView(),name , Snackbar.LENGTH_SHORT).setAction("action", null).show();
                             }

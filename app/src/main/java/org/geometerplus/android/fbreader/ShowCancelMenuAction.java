@@ -19,13 +19,13 @@
 
 package org.geometerplus.android.fbreader;
 
-import java.util.List;
+import android.content.Intent;
+
+import com.read.pan.activity.CoreReadActivity;
 
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
 
-import android.content.Intent;
-
-import com.yamin.reader.activity.CoreReadActivity;
+import java.util.List;
 
 public class ShowCancelMenuAction extends FBAndroidAction {
 	public ShowCancelMenuAction(CoreReadActivity baseActivity, FBReaderApp fbreader) {

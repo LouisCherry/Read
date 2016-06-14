@@ -47,7 +47,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.read.pan.R;
-import com.yamin.reader.activity.CoreReadActivity;
+import com.read.pan.activity.CoreReadActivity;
 
 public class StyleListActivity extends ListActivity implements IBookCollection.Listener {
 	public static final String EXISTING_BOOKMARK_KEY = "existing.bookmark";

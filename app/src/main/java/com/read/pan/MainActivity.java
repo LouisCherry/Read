@@ -233,18 +233,18 @@ public class MainActivity extends AppCompatActivity
                 intent=new Intent(this, CollectActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.nav_download:
-                //下载的图书
-                break;
-            case R.id.nav_setting:
-                //设置
-                break;
-            case R.id.nav_share:
-                //分享
-                break;
-            case R.id.nav_feedback:
-                //反馈
-                break;
+//            case R.id.nav_download:
+//                //下载的图书
+//                break;
+//            case R.id.nav_setting:
+//                //设置
+//                break;
+//            case R.id.nav_share:
+//                //分享
+//                break;
+//            case R.id.nav_feedback:
+//                //反馈
+//                break;
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;

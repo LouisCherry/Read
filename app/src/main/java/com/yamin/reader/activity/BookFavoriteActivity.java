@@ -1,15 +1,5 @@
 package com.yamin.reader.activity;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.geometerplus.android.fbreader.libraryService.BookCollectionShadow;
-import org.geometerplus.fbreader.book.Author;
-import org.geometerplus.fbreader.fbreader.FBReaderApp;
-import org.geometerplus.zlibrary.core.filesystem.ZLFile;
-import org.geometerplus.zlibrary.core.language.Language;
-import org.geometerplus.zlibrary.core.language.ZLLanguageUtil;
-
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.ContentResolver;
@@ -33,10 +23,21 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.read.pan.R;
+import com.read.pan.activity.CoreReadActivity;
 import com.yamin.reader.adapter.BookHisFavAdaper;
 import com.yamin.reader.database.DbDataOperation;
 import com.yamin.reader.model.Book;
 import com.yamin.reader.utils.ToolUtils;
+
+import org.geometerplus.android.fbreader.libraryService.BookCollectionShadow;
+import org.geometerplus.fbreader.book.Author;
+import org.geometerplus.fbreader.fbreader.FBReaderApp;
+import org.geometerplus.zlibrary.core.filesystem.ZLFile;
+import org.geometerplus.zlibrary.core.language.Language;
+import org.geometerplus.zlibrary.core.language.ZLLanguageUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class BookFavoriteActivity extends Activity {
 	private ListView lfFavoriteList;

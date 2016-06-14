@@ -19,8 +19,10 @@
 
 package org.geometerplus.android.fbreader.preferences;
 
-import java.text.DecimalFormatSymbols;
-import java.util.Locale;
+import android.content.Intent;
+import android.view.KeyEvent;
+
+import com.read.pan.activity.CoreReadActivity;
 
 import org.geometerplus.android.fbreader.libraryService.BookCollectionShadow;
 import org.geometerplus.fbreader.bookmodel.FBTextKind;
@@ -41,10 +43,8 @@ import org.geometerplus.zlibrary.text.view.style.ZLTextStyleDecoration;
 import org.geometerplus.zlibrary.ui.android.library.ZLAndroidLibrary;
 import org.geometerplus.zlibrary.ui.android.view.ZLAndroidPaintContext;
 
-import android.content.Intent;
-import android.view.KeyEvent;
-
-import com.yamin.reader.activity.CoreReadActivity;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
 
 public class PreferenceActivity extends ZLPreferenceActivity {
 	private BookCollectionShadow myCollection = new BookCollectionShadow();

@@ -19,11 +19,11 @@
 
 package org.geometerplus.android.fbreader;
 
+import com.read.pan.activity.CoreReadActivity;
+
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
 import org.geometerplus.zlibrary.text.model.ZLTextModel;
 import org.geometerplus.zlibrary.text.view.ZLTextView;
-
-import com.yamin.reader.activity.CoreReadActivity;
 
 public class ShowNavigationAction extends FBAndroidAction {
 	public ShowNavigationAction(CoreReadActivity baseActivity, FBReaderApp fbreader) {

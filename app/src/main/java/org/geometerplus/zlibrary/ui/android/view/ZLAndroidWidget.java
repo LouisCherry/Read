@@ -19,10 +19,6 @@
 
 package org.geometerplus.zlibrary.ui.android.view;
 
-import org.geometerplus.zlibrary.core.application.ZLApplication;
-import org.geometerplus.zlibrary.core.view.ZLView;
-import org.geometerplus.zlibrary.core.view.ZLViewWidget;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -33,7 +29,11 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 
-import com.yamin.reader.activity.CoreReadActivity;
+import com.read.pan.activity.CoreReadActivity;
+
+import org.geometerplus.zlibrary.core.application.ZLApplication;
+import org.geometerplus.zlibrary.core.view.ZLView;
+import org.geometerplus.zlibrary.core.view.ZLViewWidget;
 
 public class ZLAndroidWidget extends View implements ZLViewWidget, View.OnLongClickListener {
 	private final Paint myPaint = new Paint();

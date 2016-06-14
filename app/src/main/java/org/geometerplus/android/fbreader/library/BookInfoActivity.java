@@ -35,7 +35,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.read.pan.R;
-import com.yamin.reader.activity.CoreReadActivity;
+import com.read.pan.activity.CoreReadActivity;
 
 import org.geometerplus.android.fbreader.OrientationUtil;
 import org.geometerplus.android.fbreader.libraryService.BookCollectionShadow;

@@ -32,7 +32,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.read.pan.R;
-import com.yamin.reader.activity.CoreReadActivity;
+import com.read.pan.activity.CoreReadActivity;
 
 import org.geometerplus.android.fbreader.FBUtil;
 import org.geometerplus.android.fbreader.OrientationUtil;
